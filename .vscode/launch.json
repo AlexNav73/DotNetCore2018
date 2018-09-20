@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/WebApi/bin/Debug/netcoreapp2.0/DotNetCore2018.dll",
+            "program": "${workspaceFolder}/DotNetCore2018.WebApi/bin/Debug/netcoreapp2.0/DotNetCore2018.WebApi.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/WebApi",
+            "cwd": "${workspaceFolder}/DotNetCore2018.WebApi",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {

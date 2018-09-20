@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DotNetCore2018.Core\DotNetCore2018.Core.csproj" />
+  </ItemGroup>
+
 </Project>
