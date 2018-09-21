@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DotNetCore2018.Core\DotNetCore2018.Core.csproj" />
+    <ProjectReference Include="..\DotNetCore2018.Data\DotNetCore2018.Data.csproj" />
   </ItemGroup>
 
 </Project>

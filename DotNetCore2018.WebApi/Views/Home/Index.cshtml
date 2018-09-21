@@ -1,10 +1,13 @@
-@model DotNetCore2018.WebApi.Models.TestModel
-
 <html>
     <head>
         <title></title>
     </head>
     <body>
-        @Model.Name
+        <div>Hi!</div>
+        <a asp-action="Index" asp-route-foo="bar">Back to index</a>
+        <form method="POST">
+            <!-- <input asp-for="Name" /> -->
+            <input type="submit" name="save" value="Save" />
+        </form>
     </body>
 </html>
