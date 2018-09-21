@@ -1,4 +1,6 @@
 ﻿using System;
+using DotNetCore2018.Business.Services;
+using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +27,7 @@ namespace DotNetCore2018.WebApi
             {
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddScoped<ICategoryService, CategoryService>();
             services.AddMvc();
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using DotNetCore2018.Data.Entities;
 
 namespace DotNetCore2018.Data
 {

@@ -1,9 +1,17 @@
+@model IEnumerable<DotNetCore2018.Data.Entities.Category>
+
 <html>
     <head>
         <title></title>
     </head>
     <body>
         <div>Hi!</div>
+
+        @foreach (var category in Model)
+        {
+            <div class="category">@category.Name</div>
+        }
+
         <a asp-action="Index" asp-route-foo="bar">Back to index</a>
         <form method="POST">
             <!-- <input asp-for="Name" /> -->
