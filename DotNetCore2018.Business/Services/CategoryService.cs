@@ -15,6 +15,17 @@ namespace DotNetCore2018.Business.Services
             _context = context;
         }
 
+        public void Add(Category category)
+        {
+            _context.Categories.Add(category);
+            _context.SaveChanges();
+        }
+
+        public Category[] GetAll()
+        {
+            return _context.Categories.ToArray();
+        }
+
         public Category[] GetBy(Specification<Category> specification)
         {
             return _context.Categories

@@ -1,0 +1,17 @@
+@model IEnumerable<DotNetCore2018.WebApi.ViewModels.CategoryViewModel>
+
+<div>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Id</td>
+                <td>@category.Name</td>
+            </tr>
+        }
+    </table>
+</div>
