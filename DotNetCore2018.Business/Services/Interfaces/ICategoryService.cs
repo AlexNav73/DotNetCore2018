@@ -6,7 +6,9 @@ namespace DotNetCore2018.Business.Services.Interfaces
     public interface ICategoryService
     {
         Category[] GetAll();
-        Category[] GetBy(Specification<Category> specification);
+        Category[] GetAllBy(Specification<Category> specification);
+        Category GetBy(Specification<Category> specification);
+        void Update(Category category);
         void Add(Category category);
     }
 }

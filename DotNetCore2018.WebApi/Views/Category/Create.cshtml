@@ -1,14 +1,18 @@
-@model DotNetCore2018.WebApi.ViewModels.CategoryViewModel
+@model CategoryViewModel
 
-<html>
-<body>
-    <div>
-        <a asp-action="Index" asp-controller="Home">Back to list</a>
-        <form method="POST">
+@{
+    ViewBag.Title = "Create category";
+}
+
+<div>
+    <a asp-action="Index" asp-controller="Category">Back to list</a>
+    <form method="POST">
+        <div>
             <label asp-for="Name"></label>
             <input asp-for="Name" />
-            <input type="submit" name="save" value="Save" />
-        </form>
-    </div>
-</body>
-</html>
+            <span asp-validation-for="Name"></span>
+        </div>
+        <input type="submit" name="save" value="Save" />
+    </form>
+    <div asp-validation-summary="All"></div>
+</div>

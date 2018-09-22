@@ -1,0 +1,21 @@
+@page "{id}"
+
+@using DotNetCore2018.WebApi.Pages.Category
+@model EditModel
+
+@{
+    ViewBag.Title = "Edit category";
+}
+
+<div>
+    <form method="POST">
+        <input type="hidden" asp-for="Category.Id" />
+        <div>
+            <label asp-for="Category.Name"></label>
+            <input asp-for="Category.Name" />
+            <span asp-validation-for="Category.Name"></span>
+        </div>
+        <input type="submit" name="save" value="Save" />
+    </form>
+    <div asp-validation-summary="All"></div>
+</div>

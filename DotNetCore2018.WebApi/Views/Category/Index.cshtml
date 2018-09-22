@@ -1,6 +1,11 @@
-@model IEnumerable<DotNetCore2018.WebApi.ViewModels.CategoryViewModel>
+@model IEnumerable<CategoryViewModel>
+
+@{
+    ViewBag.Title = "Categories";
+}
 
 <div>
+    <a asp-action="Create">Create new</a>
     <table>
         <tr>
             <th>Id</th>
@@ -11,6 +16,7 @@
             <tr>
                 <td>@category.Id</td>
                 <td>@category.Name</td>
+                <td><a asp-page="/Category/Edit" asp-route-id="@category.Id">Edit</a></td>
             </tr>
         }
     </table>

@@ -40,6 +40,7 @@ namespace DotNetCore2018.WebApi.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CategoryViewModel model)
         {
             if (ModelState.IsValid)
@@ -51,7 +52,7 @@ namespace DotNetCore2018.WebApi.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Create));
+            return View();
         }
     }
 }
