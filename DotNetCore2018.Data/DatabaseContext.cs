@@ -4,14 +4,14 @@ using DotNetCore2018.Data.Entities;
 
 namespace DotNetCore2018.Data
 {
-    public interface IDatabaseContext
+    public interface IAppContext
     {
         DbSet<Category> Categories { get; }
     }
 
-    public sealed class DatabaseContext : DbContext, IDatabaseContext
+    public sealed class AppContext : DbContext, IAppContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options)
+        public AppContext(DbContextOptions<AppContext> options)
          : base(options)
         {
         }

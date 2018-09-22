@@ -23,7 +23,7 @@ namespace DotNetCore2018.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DatabaseContext>(options => 
+            services.AddDbContext<Data.AppContext>(options => 
             {
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
             });

@@ -10,7 +10,7 @@ using System;
 
 namespace DotNetCore2018.Data.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
+    [DbContext(typeof(AppContext))]
     [Migration("20180921121126_AddCategoryTable")]
     partial class AddCategoryTable
     {

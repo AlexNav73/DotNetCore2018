@@ -9,9 +9,9 @@ namespace DotNetCore2018.Business.Services
 {
     public sealed class CategoryService : ICategoryService
     {
-        private readonly DatabaseContext _context;
+        private readonly AppContext _context;
 
-        public CategoryService(DatabaseContext context)
+        public CategoryService(AppContext context)
         {
             _context = context;
         }
