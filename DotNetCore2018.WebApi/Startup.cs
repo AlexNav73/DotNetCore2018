@@ -40,11 +40,6 @@ namespace DotNetCore2018.WebApi
 
             app.UseStaticFiles();
             app.UseMvc(ConfigureRoutes);
-
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("No middleware reached!");
-            });
         }
 
         private void ConfigureRoutes(IRouteBuilder routeBuilder)
