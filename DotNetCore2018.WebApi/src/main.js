@@ -1,11 +1,7 @@
 require('bootstrap');
-require('jquery');
+require("bootstrap/dist/css/bootstrap.min.css");
+var $ = require('jquery');
 
-function DoHast() {
-    $(document).ready(function() {
-        console.log("djskaldjskald");
-    });
-    return "ich";
-}
-
-module.exports = DoHast;
+$('.random').ready(function() {
+    console.log("djskaldjskald");
+});
