@@ -1,15 +1,14 @@
-﻿using System;
+﻿using System.IO;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
-using DotNetCore2018.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace DotNetCore2018.WebApi
 {
@@ -39,23 +38,21 @@ namespace DotNetCore2018.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            var provider = new FileExtensionContentTypeProvider();
-            provider.Mappings[".wasm"] = "application/wasm";
-
             app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-                    System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "wwwroot")),
-                RequestPath = "/home",
-                ContentTypeProvider = provider
-            });
             app.UseMvc(ConfigureRoutes);
         }
 
         private void ConfigureRoutes(IRouteBuilder routeBuilder)
         {
-            routeBuilder.MapRoute("Default", "{controller=Home}/{action=Index}");
+            var fileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"));
+
+            routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}");
+            routeBuilder.MapGet("{controller}/{filename}.wasm", context =>
+            {
+                var filename = context.GetRouteValue("filename");
+                context.Response.ContentType = "application/wasm";
+                return context.Response.SendFileAsync(fileProvider.GetFileInfo($"{filename}.wasm"));
+            });
         }
     }
 }
