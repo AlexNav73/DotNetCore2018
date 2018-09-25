@@ -7,6 +7,8 @@ namespace DotNetCore2018.Data
     public interface IAppContext
     {
         DbSet<Category> Categories { get; }
+        DbSet<Supplier> Suppliers { get; }
+        DbSet<Product> Products { get; }
     }
 
     public sealed class AppContext : DbContext, IAppContext
@@ -17,5 +19,11 @@ namespace DotNetCore2018.Data
         }
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Product> Products { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+        }
     }
 }

@@ -11,9 +11,10 @@ using System;
 namespace DotNetCore2018.Data.Migrations
 {
     [DbContext(typeof(AppContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20180925203301_AddedProductAndSupplierTables")]
+    partial class AddedProductAndSupplierTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

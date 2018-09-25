@@ -10,11 +10,11 @@ namespace DotNetCore2018.WebApi.Controllers
     [Route("[controller]/[action]")]
     public class CategoryController : Controller
     {
-        private readonly ICategoryService _categoryService;
+        private readonly IDataService _categoryService;
         private readonly ILogger<CategoryController> _logger;
 
         public CategoryController(
-            ICategoryService categoryService,
+            IDataService categoryService,
             ILogger<CategoryController> logger)
         {
             _categoryService = categoryService;
@@ -23,7 +23,7 @@ namespace DotNetCore2018.WebApi.Controllers
 
         public IActionResult Index()
         {
-            var data = _categoryService.GetAll()
+            var data = _categoryService.GetAll<Category>()
                 .Select(x => new CategoryViewModel()
                 {
                     Id = x.Id,

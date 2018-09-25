@@ -10,12 +10,12 @@ namespace DotNetCore2018.WebApi.Pages.Category
 {
     public sealed class EditModel : PageModel
     {
-        private readonly ICategoryService _categoryService;
+        private readonly IDataService _categoryService;
 
         [BindProperty]
         public DbCategory Category { get; set; }
 
-        public EditModel(ICategoryService categoryService)
+        public EditModel(IDataService categoryService)
         {
             _categoryService = categoryService;
         }
