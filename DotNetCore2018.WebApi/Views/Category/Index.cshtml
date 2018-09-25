@@ -5,19 +5,24 @@
 }
 
 <div>
-    <a asp-action="Create">Create new</a>
-    <table>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-        </tr>
-        @foreach (var category in Model)
-        {
+    <table class="table table-sm table-hover mb-3">
+        <thead>
             <tr>
-                <td>@category.Id</td>
-                <td>@category.Name</td>
-                <td><a asp-page="/category/edit" asp-route-id="@category.Id">Edit</a></td>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col"></th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var category in Model)
+            {
+                <tr>
+                    <th scope="row">@category.Id</th>
+                    <td>@category.Name</td>
+                    <td><a asp-page="/category/edit" asp-route-id="@category.Id" class="btn btn-primary btn-sm">Edit</a></td>
+                </tr>
+            }
+        </tbody>
     </table>
+    <a asp-action="Create" class="btn btn-primary">Create new</a>
 </div>

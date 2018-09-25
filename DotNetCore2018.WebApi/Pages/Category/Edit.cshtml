@@ -8,15 +8,14 @@
 }
 
 <div>
-    <a asp-action="Index" asp-controller="Category">Back to list</a>
     <form method="POST">
         <input type="hidden" asp-for="Category.Id" />
-        <div>
+        <div class="form-group">
             <label asp-for="Category.Name"></label>
-            <input asp-for="Category.Name" />
+            <input asp-for="Category.Name" class="form-control"/>
             <span asp-validation-for="Category.Name"></span>
         </div>
-        <input type="submit" name="save" value="Save" />
+        <button type="submit" class="btn btn-primary">Save</button>
     </form>
     <div asp-validation-summary="All"></div>
 </div>
