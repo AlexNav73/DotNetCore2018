@@ -20,6 +20,7 @@
                     <th scope="row">@category.Id</th>
                     <td>@category.Name</td>
                     <td><a asp-page="/category/edit" asp-route-id="@category.Id" class="btn btn-primary btn-sm">Edit</a></td>
+                    <td><a onclick="window.rust.ui_category_delete(@category.Id)" class="btn btn-primary btn-sm">Delete</a></td>
                 </tr>
             }
         </tbody>

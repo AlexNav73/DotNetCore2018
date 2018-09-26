@@ -4,16 +4,15 @@ var $ = require('jquery');
 const ui = import('./ui');
 
 window.rust = window.rust || {};
-window.rust.greet = function() {};
+window.rust.ui_category_delete = function() {};
+window.rust.ui_find_elem_by_id = function() {};
 
 ui.then(m => {
-    window.rust.greet = m.greet;
+    window.rust.ui_category_delete = m.ui_category_delete;
+    window.rust.ui_find_elem_by_id = m.ui_find_elem_by_id;
 });
 
-$('.random').ready(function() {
-    window.rust.greet("Alex");
-});
 $('#pushme').click(function(e) {
     e.preventDefault();
-    window.rust.greet("Alex");
+    window.rust.ui_find_elem_by_id("pushme", "data-category-id");
 });

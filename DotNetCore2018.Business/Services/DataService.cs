@@ -43,5 +43,11 @@ namespace DotNetCore2018.Business.Services
             _context.Attach(obj).State = EntityState.Modified;
             _context.SaveChanges();
         }
+
+        public void Delete<T>(T obj) where T : class, IHasId<int>
+        {
+            _context.Set<T>().Remove(obj);
+            _context.SaveChanges();
+        }
     }
 }
