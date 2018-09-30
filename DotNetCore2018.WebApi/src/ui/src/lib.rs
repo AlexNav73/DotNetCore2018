@@ -6,6 +6,9 @@ use wasm_bindgen_futures::future_to_promise;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::{Request, RequestInit, RequestMode, Response};
 
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
 #[wasm_bindgen]
 extern "C" {
     fn alert(s: &str);
@@ -20,6 +23,8 @@ macro_rules! console_log {
 
 #[wasm_bindgen]
 pub fn ui_find_elem_by_id(elem_id: &str, data_attr: &str) -> Result<Promise, JsValue> {
+    console_error_panic_hook::set_once();
+
     let document = web_sys::window().unwrap().document().unwrap();
     let element = document.get_element_by_id(elem_id).ok_or("can't find element by id")?;
     let category_id = element.get_attribute(data_attr).unwrap();
@@ -29,6 +34,8 @@ pub fn ui_find_elem_by_id(elem_id: &str, data_attr: &str) -> Result<Promise, JsV
 
 #[wasm_bindgen]
 pub fn ui_category_delete(id: u32) -> Promise {
+    console_error_panic_hook::set_once();
+
     let url = format!("../api/v1/categoryapi/delete?id={}", id);
 
     let mut init = RequestInit::new();
