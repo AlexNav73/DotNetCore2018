@@ -27,5 +27,9 @@ features = [
   'Response',
   'Window',
   'Document',
-  'Element'
+  'Element',
+  'console'
 ]
+
+[profile.release]
+lto = true
