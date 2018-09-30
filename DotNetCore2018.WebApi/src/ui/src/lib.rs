@@ -1,11 +1,3 @@
-extern crate futures;
-extern crate js_sys;
-extern crate wasm_bindgen;
-extern crate wasm_bindgen_futures;
-extern crate web_sys;
-#[macro_use]
-extern crate serde_derive;
-
 use futures::{future, Future};
 use js_sys::Promise;
 use wasm_bindgen::prelude::*;
