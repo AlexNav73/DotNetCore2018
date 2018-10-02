@@ -1,7 +1,5 @@
 use js_sys::Promise;
 use wasm_bindgen::prelude::*;
-use wasm_bindgen_futures::future_to_promise;
-use wasm_bindgen_futures::JsFuture;
 use web_sys::{Request, RequestInit};
 
 macro_rules! console_log {
@@ -27,5 +25,5 @@ pub fn ui_category_delete(id: u32) -> Promise {
     let window = web_sys::window().unwrap();
     let request_promise = window.fetch_with_request(&request);
 
-    future_to_promise(JsFuture::from(request_promise))
+    request_promise
 }
