@@ -1,0 +1,1 @@
+cargo.exe +nightly check --target wasm32-unknown-unknown
