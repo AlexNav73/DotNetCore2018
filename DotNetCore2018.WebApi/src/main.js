@@ -11,7 +11,10 @@ window.rust = ui.then(m => ({
 
 $('#pushme').click(function(e) {
     e.preventDefault();
-    //window.rust.then(x => x.ui_find_elem_by_id("pushme", "data-category-id"));
-    var a = window.rust.then(x => x.ui_parse_val($('#idField'), "dsadsa"));
-    a.then(x => console.log(x));
+
+    window.rust.then(x => x.ui_find_elem_by_id($('#pushme'), "categoryId"))
+        .then(x => console.log("Deleted"))
+        .catch(e => console.warn(e));
+    window.rust.then(x => x.ui_parse_val($('#idField'), "dsadsa"))
+        .then(x => console.log(x));
 });
