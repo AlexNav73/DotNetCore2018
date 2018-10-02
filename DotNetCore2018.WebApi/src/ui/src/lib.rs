@@ -12,6 +12,25 @@ macro_rules! console_log {
 }
 
 #[wasm_bindgen]
+extern "C" {
+    pub type Element;
+
+    #[wasm_bindgen(structural, method)]
+    pub fn val(this: &Element) -> String;
+
+    #[wasm_bindgen(structural, method, js_name = "val")]
+    pub fn set_val(this: &Element, val: &str) -> Promise;
+}
+
+#[wasm_bindgen]
+pub fn ui_parse_val(elem: &Element) -> Promise {
+    console_log!("{}", elem.val());
+    let p = elem.set_val(&"");
+    console_log!("{}", elem.val());
+    p
+}
+
+#[wasm_bindgen]
 pub fn ui_find_elem_by_id(elem_id: &str, data_attr: &str) -> Result<Promise, JsValue> {
     console_error_panic_hook::set_once();
 
