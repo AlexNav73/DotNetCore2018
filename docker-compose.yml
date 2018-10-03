@@ -1,0 +1,7 @@
+version: 3
+
+services:
+    aspnet:
+        build: ./DotNetCore2018.WebApi
+    ui:
+        build: ./DotNetCore2018.WebApi/src/ui
