@@ -1,0 +1,27 @@
+﻿@page "{id:int}"
+
+@using DotNetCore2018.WebApi.Pages.Product
+@model EditModel
+
+@{
+    ViewBag.Title = "Edit product";
+}
+
+<div>
+    <form method="POST">
+        <input type="hidden" asp-for="Product.Id" />
+        <div class="form-group">
+            <label asp-for="Product.Name"></label>
+            <input asp-for="Product.Name" class="form-control"/>
+            <span asp-validation-for="Product.Name"></span>
+            <div>
+                <select asp-for="Product.CategoryId" asp-items="Model.Categories"></select>
+            </div>
+            <div>
+                <select asp-for="Product.SupplierId" asp-items="Model.Suppliers"></select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <div asp-validation-summary="All"></div>
+</div>

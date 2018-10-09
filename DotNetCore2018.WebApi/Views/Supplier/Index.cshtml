@@ -1,0 +1,29 @@
+@model IEnumerable<SupplierViewModel>
+
+@{
+    ViewBag.Title = "Suppliers";
+}
+
+<div>
+    <table class="table table-sm table-hover mb-3">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var supplier in Model)
+            {
+                <tr>
+                    <th scope="row">@supplier.Id</th>
+                    <td>@supplier.Name</td>
+                    <td><a asp-page="/supplier/edit" asp-route-id="@supplier.Id" class="btn btn-primary btn-sm">Edit</a></td>
+                    <td><a onclick="deleteSupplier(@supplier.Id)" class="btn btn-primary btn-sm">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Create" class="btn btn-primary">Create new</a>
+</div>

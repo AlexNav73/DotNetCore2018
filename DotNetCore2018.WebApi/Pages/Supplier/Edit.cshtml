@@ -1,0 +1,21 @@
+﻿@page "{id:int}"
+
+@using DotNetCore2018.WebApi.Pages.Supplier
+@model EditModel
+
+@{
+    ViewBag.Title = "Edit supplier";
+}
+
+<div>
+    <form method="POST">
+        <input type="hidden" asp-for="Supplier.Id" />
+        <div class="form-group">
+            <label asp-for="Supplier.Name"></label>
+            <input asp-for="Supplier.Name" class="form-control"/>
+            <span asp-validation-for="Supplier.Name"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <div asp-validation-summary="All"></div>
+</div>

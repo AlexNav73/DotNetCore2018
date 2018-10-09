@@ -4,6 +4,7 @@ using DotNetCore2018.Business.Specifications;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
@@ -13,23 +14,28 @@ namespace DotNetCore2018.WebApi.Controllers
     {
         private readonly IDataService _categoryService;
         private readonly ILogger<CategoryController> _logger;
+        private readonly IConfiguration _configuration;
 
         public CategoryController(
             IDataService categoryService,
-            ILogger<CategoryController> logger)
+            ILogger<CategoryController> logger,
+            IConfiguration configuration)
         {
             _categoryService = categoryService;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public IActionResult Index()
         {
             var data = _categoryService.GetAll<Category>()
+                .Take(_configuration.GetValue<int>("categoryNum"))
                 .Select(x => new CategoryViewModel()
                 {
                     Id = x.Id,
                     Name = x.Name
-                });
+                })
+                .ToArray();
 
             return View(data);
         }

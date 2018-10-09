@@ -1,0 +1,33 @@
+@model IEnumerable<ProductViewModel>
+
+@{
+    ViewBag.Title = "Products";
+}
+
+<div>
+    <table class="table table-sm table-hover mb-3">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Supplier</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <th scope="row">@product.Id</th>
+                    <td>@product.Name</td>
+                    <td>@product.Category.Name</td>
+                    <td>@product.Supplier.Name</td>
+                    <td><a asp-page="/product/edit" asp-route-id="@product.Id" class="btn btn-primary btn-sm">Edit</a></td>
+                    <td><a onclick="deleteProduct(@product.Id)" class="btn btn-primary btn-sm">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Create" class="btn btn-primary">Create new</a>
+</div>

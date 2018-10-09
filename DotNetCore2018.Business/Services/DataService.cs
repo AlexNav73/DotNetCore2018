@@ -22,17 +22,15 @@ namespace DotNetCore2018.Business.Services
             _context.SaveChanges();
         }
 
-        public T[] GetAll<T>() where T : class, IHasId<int>
+        public IQueryable<T> GetAll<T>() where T : class, IHasId<int>
         {
-            return _context.Set<T>().ToArray();
+            return _context.Set<T>();
         }
 
-        public T[] GetAllBy<T>(Specification<T> specification)
+        public IQueryable<T> GetAllBy<T>(Specification<T> specification)
             where T : class, IHasId<int>
         {
-            return _context.Set<T>()
-                .Where(specification.Expr)
-                .ToArray();
+            return _context.Set<T>().Where(specification.Expr);
         }
 
         public T GetBy<T>(Specification<T> specification) where T : class, IHasId<int>
