@@ -1,5 +1,7 @@
 use js_sys::Promise;
 use web_sys::{Request, RequestInit};
+use serde::ser::Serialize;
+use serde_urlencoded::to_string;
 
 use std::borrow::Cow;
 
@@ -21,15 +23,8 @@ impl<'a> Fetch<'a> {
         Self { method, uri: uri.into() }
     }
 
-    pub fn with_query_params<'b, I>(mut self, params: I) -> Self 
-        where I: IntoIterator<Item=(&'b str, String)>
-    {
-        let params = params.into_iter()
-            .map(|(key, val)| format!("{}={}", key, val))
-            .collect::<Vec<_>>();
-        let params = params.join("&");
-        self.uri = format!("{}?{}", self.uri, params).into();
-
+    pub fn with_query_params<T: Serialize>(mut self, params: T) -> Self {
+        self.uri = format!("{}?{}", self.uri, to_string(params).expect("invalid url params")).into();
         self
     }
 

@@ -20,20 +20,10 @@
                     <th scope="row">@category.Id</th>
                     <td>@category.Name</td>
                     <td><a asp-page="/category/edit" asp-route-id="@category.Id" class="btn btn-primary btn-sm">Edit</a></td>
-                    <td><a onclick="deleteCategory(@category.Id)" class="btn btn-primary btn-sm">Delete</a></td>
+                    <td><a onclick="window.call_rust(x => x.ui_category_delete(@category.Id))" class="btn btn-primary btn-sm">Delete</a></td>
                 </tr>
             }
         </tbody>
     </table>
     <a asp-action="Create" class="btn btn-primary">Create new</a>
 </div>
-
-@section scripts {
-    <script>
-        function deleteCategory(id) {
-            window.rust
-                .then(x => x.ui_category_delete(id))
-                .then(_ => location.reload());
-        }
-    </script>
-}

@@ -24,7 +24,7 @@
                     <td>@product.Category.Name</td>
                     <td>@product.Supplier.Name</td>
                     <td><a asp-page="/product/edit" asp-route-id="@product.Id" class="btn btn-primary btn-sm">Edit</a></td>
-                    <td><a onclick="deleteProduct(@product.Id)" class="btn btn-primary btn-sm">Delete</a></td>
+                    <td><a onclick="window.call_rust(x => x.ui_product_delete(@product.Id))" class="btn btn-primary btn-sm">Delete</a></td>
                 </tr>
             }
         </tbody>

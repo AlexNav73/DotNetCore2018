@@ -1,11 +1,12 @@
-FROM rust:1.29.1-slim-stretch
+FROM rust
 
-WORKDIR /app
-COPY . .
-RUN mkdir ./output
-VOLUME ./output
-RUN ["rustup", "default", "nightly-2018-10-02"]
-RUN ["rustup", "target", "add", "wasm32-unknown-unknown"]
-RUN ["cargo", "+nightly", "install", "wasm-bindgen-cli"]
+# VOLUME /ui
+WORKDIR /ui
 
-ENTRYPOINT [ "build_ui.sh" ]
+# COPY ./build_ui.sh .
+
+RUN rustup default nightly-2018-10-02
+RUN rustup target add wasm32-unknown-unknown
+RUN cargo +nightly-2018-10-02 install wasm-bindgen-cli
+
+# ENTRYPOINT ["/bin/sh", "-c", "build_ui.sh"]

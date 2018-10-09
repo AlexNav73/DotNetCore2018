@@ -29,19 +29,20 @@ namespace DotNetCore2018.WebApi.Controllers
             var products = _dataService.GetAll<Product>()
                 .Include(x => x.Category)
                 .Include(x => x.Supplier)
+                .AsEnumerable()
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Category = new CategoryViewModel()
                     {
-                        Id = x.Category.Id,
-                        Name = x.Category.Name
+                        Id = x.Category != null ? x.Category.Id : 0,
+                        Name = x.Category?.Name
                     },
                     Supplier = new SupplierViewModel()
                     {
-                        Id = x.Supplier.Id,
-                        Name = x.Supplier.Name
+                        Id = x.Supplier != null ? x.Supplier.Id : 0,
+                        Name = x.Supplier?.Name
                     }
                 })
                 .ToArray();

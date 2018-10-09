@@ -14,13 +14,21 @@ use self::fetch::{Fetch, Method};
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-#[wasm_bindgen]
-pub fn ui_category_delete(id: u32) -> Promise {
-    console_error_panic_hook::set_once();
+macro_rules! api_call {
+    ($name:ident, $controller:expr, $action:expr) => {
+        #[wasm_bindgen]
+        pub fn $name(id: u32) -> Promise {
+            console_error_panic_hook::set_once();
 
-    Fetch::new(Method::Delete, "../api/v1/categoryapi/delete")
-        .with_query_params(vec![
-            ("id", id.to_string())
-        ])
-        .send()
+            Fetch::new(Method::Delete, concat!("../api/v1/", $controller, "/", $action))
+                .with_query_params(vec![
+                    ("id", id.to_string())
+                ])
+                .send()
+        }
+    }
 }
+
+api_call!(ui_category_delete, "categoryapi", "delete");
+api_call!(ui_product_delete, "productapi", "delete");
+api_call!(ui_supplier_delete, "supplierapi", "delete");

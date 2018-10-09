@@ -20,7 +20,7 @@
                     <th scope="row">@supplier.Id</th>
                     <td>@supplier.Name</td>
                     <td><a asp-page="/supplier/edit" asp-route-id="@supplier.Id" class="btn btn-primary btn-sm">Edit</a></td>
-                    <td><a onclick="deleteSupplier(@supplier.Id)" class="btn btn-primary btn-sm">Delete</a></td>
+                    <td><a onclick="window.call_rust(x => x.ui_supplier_delete(@supplier.Id))" class="btn btn-primary btn-sm">Delete</a></td>
                 </tr>
             }
         </tbody>
