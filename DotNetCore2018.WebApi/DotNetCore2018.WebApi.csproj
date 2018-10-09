@@ -10,12 +10,18 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="NLog" Version="4.5.10" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DotNetCore2018.Core\DotNetCore2018.Core.csproj" />
     <ProjectReference Include="..\DotNetCore2018.Data\DotNetCore2018.Data.csproj" />
     <ProjectReference Include="..\DotNetCore2018.Business\DotNetCore2018.Business.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="NLog.config" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

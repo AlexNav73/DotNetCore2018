@@ -37,6 +37,10 @@ namespace DotNetCore2018.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/home/error");
+            }
 
             app.UseStaticFiles();
             app.UseMvc(ConfigureRoutes);
