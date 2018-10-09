@@ -29,6 +29,7 @@ namespace DotNetCore2018.WebApi.Controllers
         public IActionResult Index()
         {
             var data = _categoryService.GetAll<Category>()
+                .OrderBy(x => x.Id)
                 .Take(_configuration.GetValue<int>("categoryNum"))
                 .Select(x => new CategoryViewModel()
                 {
