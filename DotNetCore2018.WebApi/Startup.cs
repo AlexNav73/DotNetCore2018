@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi
 {
@@ -31,8 +33,14 @@ namespace DotNetCore2018.WebApi
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            IApplicationLifetime appLifetime,
+            ILoggerFactory loggerFactory)
         {
+            appLifetime.ApplicationStarted.Register(OnApplicationStart, loggerFactory.CreateLogger<Startup>());
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -57,6 +65,12 @@ namespace DotNetCore2018.WebApi
                 context.Response.ContentType = "application/wasm";
                 return context.Response.SendFileAsync(fileProvider.GetFileInfo($"{filename}.wasm"));
             });
+        }
+
+        private void OnApplicationStart(object sender)
+        {
+            var logger = (Logger<Startup>)sender;
+            logger.LogInformation($"Application started in {Directory.GetCurrentDirectory()}");
         }
     }
 }
