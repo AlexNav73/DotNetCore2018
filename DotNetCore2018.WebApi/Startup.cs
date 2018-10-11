@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -58,14 +59,18 @@ namespace DotNetCore2018.WebApi
         {
             var fileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"));
 
-            routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}");
-            routeBuilder.MapGet("{controller}/{filename}.wasm", context =>
+            Task SendWasmFile(HttpContext context)
             {
                 var filename = context.GetRouteValue("filename");
                 context.Response.ContentType = "application/wasm";
                 return context.Response.SendFileAsync(fileProvider.GetFileInfo($"{filename}.wasm"));
-            });
+            }
+
+            routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}");
+            routeBuilder.MapGet("{controller}/{filename}.wasm", SendWasmFile);
+            routeBuilder.MapGet("{controller}/{action}/{filename}.wasm", SendWasmFile);
         }
+
 
         private void OnApplicationStart(object sender)
         {
