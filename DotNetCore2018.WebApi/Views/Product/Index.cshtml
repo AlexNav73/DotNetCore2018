@@ -5,29 +5,11 @@
 }
 
 <div>
-    <table class="table table-sm table-hover mb-3">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Category</th>
-                <th scope="col">Supplier</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var product in Model)
-            {
-                <tr>
-                    <th scope="row">@product.Id</th>
-                    <td>@product.Name</td>
-                    <td>@product.Category.Name</td>
-                    <td>@product.Supplier.Name</td>
-                    <td><a asp-page="/product/edit" asp-route-id="@product.Id" class="btn btn-primary btn-sm">Edit</a></td>
-                    <td><a onclick="window.call_rust(x => x.ui_product_delete(@product.Id))" class="btn btn-primary btn-sm">Delete</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card-deck mb-5">
+        @foreach (var product in Model)
+        {
+            @Html.Partial("_ProductCard", product)
+        }
+    </div>
     <a asp-action="Create" class="btn btn-primary">Create new</a>
 </div>

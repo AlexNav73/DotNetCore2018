@@ -1,0 +1,15 @@
+@model ProductViewModel
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">
+            <b>Category</b>: <i>@Model.Category.Name</i>
+        </p>
+        <p class="card-text">
+            <b>Supplier</b>: <i>@Model.Supplier.Name</i>
+        </p>
+        <a asp-page="/product/edit" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Edit</a>
+        <a onclick="window.call_rust(x => x.ui_product_delete(@Model.Id))" class="btn btn-primary btn-sm">Delete</a>
+    </div>
+</div>

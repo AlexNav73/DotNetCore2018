@@ -6,16 +6,7 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-dark border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal text-white">EPAM</h5>
-        <nav class="my-2 my-md-0 mr-md-3">
-            <a asp-action="index" asp-controller="home" class="p-2 text-white">Home</a>
-            <a asp-action="index" asp-controller="category" class="p-2 text-white">Category</a>
-            <a asp-action="index" asp-controller="product" class="p-2 text-white">Products</a>
-            <a asp-action="index" asp-controller="supplier" class="p-2 text-white">Suppliers</a>
-        </nav>
-        <a href="#" class="btn btn-light">Sign up</a>
-    </div>
+    @Html.Partial("_Header")
     <main>
         <div class="album py-5 bg-light">
             <div class="container">
@@ -25,14 +16,7 @@
             </div>
         </div>
     </main>
-    <footer class="text-muted">
-        <div class="container">
-            <p class="float-right">
-                <a href="#">Back to top</a>
-                <p>Some text about this awesome app</p>
-            </p>
-        </div>
-    </footer>
+    @Html.Partial("_Footer")
     <script asp-src-include="~/*.js"></script>
     @RenderSection("scripts", required: false)
 </body>
