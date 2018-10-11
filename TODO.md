@@ -1,1 +1,0 @@
-1. Add logging in startup ctor to view current configuration

@@ -19,9 +19,15 @@ namespace DotNetCore2018.WebApi
     {
         private readonly IConfiguration _configuration;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             _configuration = configuration;
+
+            var logConfig = configuration.GetSection("Logging");
+            var logLevelConfig = logConfig.GetSection("LogLevel");
+            var defaultLogLevel = logLevelConfig.GetValue<string>("Default");
+
+            logger.LogTrace("Logging configuration: {0}", defaultLogLevel);
         }
 
         public void ConfigureServices(IServiceCollection services)
