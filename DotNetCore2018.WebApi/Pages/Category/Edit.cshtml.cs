@@ -12,13 +12,15 @@ namespace DotNetCore2018.WebApi.Pages.Category
     public sealed class EditModel : PageModel
     {
         private readonly IDataService _categoryService;
+        private readonly IFileService _fileService;
 
         [BindProperty]
         public CategoryViewModel Category { get; set; }
 
-        public EditModel(IDataService categoryService)
+        public EditModel(IDataService categoryService, IFileService fileService)
         {
             _categoryService = categoryService;
+            _fileService = fileService;
         }
 
         public IActionResult OnGet(int id)
@@ -40,20 +42,11 @@ namespace DotNetCore2018.WebApi.Pages.Category
         {
             if (ModelState.IsValid)
             {
-                Guid? imageName = null;
-                if (Category.Image != null)
-                {
-                    imageName = Guid.NewGuid();
-                    using (var writer = System.IO.File.OpenWrite($"./wwwroot/images/{imageName}.jpeg"))
-                    {
-                        Category.Image.CopyTo(writer);
-                    }
-                }
                 _categoryService.Update(new DbCategory()
                 {
                     Id = Category.Id,
                     Name = Category.Name,
-                    Image = imageName
+                    Image = _fileService.SaveFile(Category.Image.OpenReadStream())
                 });
                 return RedirectToAction("Index", "Category");
             }

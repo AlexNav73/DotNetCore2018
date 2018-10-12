@@ -37,6 +37,7 @@ namespace DotNetCore2018.WebApi
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddScoped<IDataService, DataService>();
+            services.AddScoped<IFileService, FileService>();
             services.AddMvc();
         }
 

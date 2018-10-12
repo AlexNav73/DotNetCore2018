@@ -18,12 +18,14 @@ namespace DotNetCore2018.Tests
     {
         private IConfiguration _configuration;
         private ILogger<CategoryController> _logger;
+        private IFileService _fileService;
 
         [SetUp]
         public void Setup()
         {
             _configuration = TestHelper.BuildConfig();
             _logger = TestHelper.BuildLogger<CategoryController>();
+            _fileService = TestHelper.BuildFileService();
         }
 
         [Test]
@@ -31,7 +33,7 @@ namespace DotNetCore2018.Tests
         {
             // Arrange
             var dataService = new InMemoryDataService();
-            var controller = new CategoryController(dataService, _logger, _configuration);
+            var controller = new CategoryController(dataService, _logger, _configuration, _fileService);
 
             // Act
             var result = controller.Index();
@@ -48,10 +50,10 @@ namespace DotNetCore2018.Tests
         {
             // Arrange
             var dataService = new InMemoryDataService();
-            var controller = new CategoryController(dataService, _logger, _configuration);
+            var controller = new CategoryController(dataService, _logger, _configuration, _fileService);
 
             // Act
-            controller.Create(new CategoryViewModel() { Name = "test" });
+            controller.Create(new CategoryViewModel() { Name = "test", Image = new ImageMock() });
 
             // Assert
             var data = dataService.GetAll<Category>().ToArray();

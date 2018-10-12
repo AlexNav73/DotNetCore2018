@@ -17,15 +17,18 @@ namespace DotNetCore2018.WebApi.Controllers
         private readonly IDataService _dataService;
         private readonly ILogger<CategoryController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IFileService _fileService;
 
         public CategoryController(
             IDataService categoryService,
             ILogger<CategoryController> logger,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IFileService fileService)
         {
             _dataService = categoryService;
             _logger = logger;
             _configuration = configuration;
+            _fileService = fileService;
         }
 
         public IActionResult Index()
@@ -57,17 +60,11 @@ namespace DotNetCore2018.WebApi.Controllers
             {
                 _logger.LogInformation("Post message received by create category method");
 
-                Guid? imageName = null;
-                if (model.Image != null)
-                {
-                    imageName = Guid.NewGuid();
-                    using (var writer = System.IO.File.OpenWrite($"./wwwroot/images/{imageName}.jpeg"))
-                    {
-                        model.Image.CopyTo(writer);
-                    }
-                }
-
-                var category = new Category() { Name = model.Name, Image = imageName };
+                var category = new Category() 
+                { 
+                    Name = model.Name,
+                    Image = _fileService.SaveFile(model.Image.OpenReadStream())
+                };
                 _dataService.Add(category);
 
                 return RedirectToAction(nameof(Index));
@@ -83,12 +80,10 @@ namespace DotNetCore2018.WebApi.Controllers
             var category = _dataService.GetBy(new IdSpecification<Category>(id));
             if (category != null && category.Image != null)
             {
-                var image = System.IO.File.OpenRead($"./wwwroot/images/{category.Image}.jpeg");
-                return File(image, "image/jpeg");
+                return File(_fileService.OpenFile(category.Image.Value), "image/jpeg");
             }
 
-            var noImage = System.IO.File.OpenRead($"./wwwroot/images/NoImage.jpg");
-            return File(noImage, "image/jpeg");
+            return File(_fileService.NoImageFile(), "image/jpeg");
         }
     }
 }

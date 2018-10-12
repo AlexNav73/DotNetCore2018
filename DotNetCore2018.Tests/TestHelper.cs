@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Tests.Mocks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -28,5 +30,7 @@ namespace DotNetCore2018.Tests
         {
             return (self as ViewResult)?.ViewData?.Model as T;
         }
+
+        public static IFileService BuildFileService() => new FileServiceMock();
     }
 }
