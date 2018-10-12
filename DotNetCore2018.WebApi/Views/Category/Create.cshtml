@@ -5,11 +5,16 @@
 }
 
 <div>
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label asp-for="Name"></label>
             <input asp-for="Name" class="form-control"/>
             <span asp-validation-for="Name"></span>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="file" asp-for="Image" />
+            </div>
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>

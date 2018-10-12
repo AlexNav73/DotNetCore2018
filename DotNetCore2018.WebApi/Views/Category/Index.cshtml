@@ -5,25 +5,11 @@
 }
 
 <div>
-    <table class="table table-sm table-hover mb-3">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var category in Model)
-            {
-                <tr>
-                    <th scope="row">@category.Id</th>
-                    <td>@category.Name</td>
-                    <td><a asp-page="/category/edit" asp-route-id="@category.Id" class="btn btn-primary btn-sm">Edit</a></td>
-                    <td><a onclick="window.call_rust(x => x.ui_category_delete(@category.Id))" class="btn btn-primary btn-sm">Delete</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card-deck mb-5">
+        @foreach (var category in Model)
+        {
+            @Html.Partial("_CategoryCard", category)
+        }
+    </div>
     <a asp-action="Create" class="btn btn-primary">Create new</a>
 </div>
