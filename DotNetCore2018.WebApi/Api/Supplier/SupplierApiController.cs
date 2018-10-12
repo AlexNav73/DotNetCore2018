@@ -23,15 +23,19 @@ namespace DotNetCore2018.WebApi.Api.Supplier
 
         [HttpDelete, ActionName("delete")]
         [ProducesResponseType(202)]
-        public void DeleteById(int id)
+        public IActionResult DeleteById(int id)
         {
             _logger.LogWarning($"Delete supplier by id: {id}");
+
             var supplier = _dataService.GetBy(new IdSpecification<DbSupplier>(id));
             if (supplier != null)
             {
                 _logger.LogWarning("Supplier found");
                 _dataService.Delete(supplier);
+                return Accepted();
             }
+
+            return NotFound();
         }
     }
 }

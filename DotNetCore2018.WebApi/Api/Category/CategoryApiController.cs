@@ -3,6 +3,7 @@ using DotNetCore2018.Business.Specifications;
 using DbCategory = DotNetCore2018.Data.Entities.Category;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace DotNetCore2018.WebApi.Api.Category
 {
@@ -23,15 +24,19 @@ namespace DotNetCore2018.WebApi.Api.Category
 
         [HttpDelete, ActionName("delete")]
         [ProducesResponseType(202)]
-        public void DeleteById(int id)
+        public IActionResult DeleteById(int id)
         {
             _logger.LogWarning($"Delete category by id: {id}");
+
             var category = _dataService.GetBy(new IdSpecification<DbCategory>(id));
             if (category != null)
             {
                 _logger.LogWarning("Category found");
                 _dataService.Delete(category);
+                return Accepted();
             }
+
+            return NotFound();
         }
     }
 }

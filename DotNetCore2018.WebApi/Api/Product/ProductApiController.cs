@@ -23,7 +23,7 @@ namespace DotNetCore2018.WebApi.Api.Product
 
         [HttpDelete, ActionName("delete")]
         [ProducesResponseType(202)]
-        public void DeleteById(int id)
+        public IActionResult DeleteById(int id)
         {
             _logger.LogWarning($"Delete product by id: {id}");
             var product = _dataService.GetBy(new IdSpecification<DbProduct>(id));
@@ -31,7 +31,10 @@ namespace DotNetCore2018.WebApi.Api.Product
             {
                 _logger.LogWarning("Product found");
                 _dataService.Delete(product);
+                return Accepted();
             }
+
+            return NotFound();
         }
     }
 }
