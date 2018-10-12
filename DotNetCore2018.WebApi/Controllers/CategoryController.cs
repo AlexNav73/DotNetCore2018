@@ -56,7 +56,6 @@ namespace DotNetCore2018.WebApi.Controllers
             if (ModelState.IsValid)
             {
                 _logger.LogInformation("Post message received by create category method");
-                _logger.LogInformation($"File size is: {model.Image?.Length}");
 
                 Guid? imageName = null;
                 if (model.Image != null)

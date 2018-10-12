@@ -1,3 +1,4 @@
+using System;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Business.Specifications;
 using DotNetCore2018.WebApi.ViewModels;
@@ -13,7 +14,7 @@ namespace DotNetCore2018.WebApi.Pages.Category
         private readonly IDataService _categoryService;
 
         [BindProperty]
-        public DbCategory Category { get; set; }
+        public CategoryViewModel Category { get; set; }
 
         public EditModel(IDataService categoryService)
         {
@@ -27,7 +28,11 @@ namespace DotNetCore2018.WebApi.Pages.Category
             {
                 return RedirectToAction("Index", "Category");
             }
-            Category = category;
+            Category = new CategoryViewModel()
+            {
+                Id = category.Id,
+                Name = category.Name,
+            };
             return Page();
         }
 
@@ -35,7 +40,21 @@ namespace DotNetCore2018.WebApi.Pages.Category
         {
             if (ModelState.IsValid)
             {
-                _categoryService.Update(Category);
+                Guid? imageName = null;
+                if (Category.Image != null)
+                {
+                    imageName = Guid.NewGuid();
+                    using (var writer = System.IO.File.OpenWrite($"./wwwroot/images/{imageName}.jpeg"))
+                    {
+                        Category.Image.CopyTo(writer);
+                    }
+                }
+                _categoryService.Update(new DbCategory()
+                {
+                    Id = Category.Id,
+                    Name = Category.Name,
+                    Image = imageName
+                });
                 return RedirectToAction("Index", "Category");
             }
             return Page();
