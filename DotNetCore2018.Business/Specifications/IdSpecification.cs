@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using DotNetCore2018.Core;
 using DotNetCore2018.Data;
 
 namespace DotNetCore2018.Business.Specifications

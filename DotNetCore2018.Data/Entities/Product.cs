@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using DotNetCore2018.Core;
 
 namespace DotNetCore2018.Data.Entities
 {

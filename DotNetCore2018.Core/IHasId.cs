@@ -1,4 +1,4 @@
-namespace DotNetCore2018.Data
+namespace DotNetCore2018.Core
 {
     public interface IHasId<T>
     {
