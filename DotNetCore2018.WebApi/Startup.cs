@@ -64,7 +64,13 @@ namespace DotNetCore2018.WebApi
 
         private void ConfigureRoutes(IRouteBuilder routeBuilder)
         {
-            var fileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"));
+            var wwwroot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            var fileProvider = new PhysicalFileProvider(wwwroot);
+
+            if (!Directory.Exists(Path.Combine(wwwroot, "images")))
+            {
+                Directory.CreateDirectory(Path.Combine(wwwroot, "images"));
+            }
 
             Task SendWasmFile(HttpContext context)
             {
@@ -73,11 +79,10 @@ namespace DotNetCore2018.WebApi
                 return context.Response.SendFileAsync(fileProvider.GetFileInfo($"{filename}.wasm"));
             }
 
-            routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}");
             routeBuilder.MapGet("{controller}/{filename}.wasm", SendWasmFile);
             routeBuilder.MapGet("{controller}/{action}/{filename}.wasm", SendWasmFile);
+            routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
         }
-
 
         private void OnApplicationStart(object sender)
         {

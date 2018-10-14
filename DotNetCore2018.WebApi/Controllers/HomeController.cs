@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
-    [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
