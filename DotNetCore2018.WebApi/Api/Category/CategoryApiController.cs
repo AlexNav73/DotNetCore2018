@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace DotNetCore2018.WebApi.Api.Category
 {
     [Produces("application/json")]
-    [Route("api/v1/[controller]/[action]")]
+    [Route("api/v1/[controller]")]
     public sealed class CategoryApiController : ControllerBase
     {
         private readonly IDataService _dataService;
@@ -22,7 +22,7 @@ namespace DotNetCore2018.WebApi.Api.Category
             _logger = logger;
         }
 
-        [HttpDelete, ActionName("delete")]
+        [HttpDelete("delete")]
         [ProducesResponseType(202)]
         public IActionResult DeleteById(int id)
         {

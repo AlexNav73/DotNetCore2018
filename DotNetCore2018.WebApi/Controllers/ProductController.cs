@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class ProductController : Controller
     {
         private readonly IDataService _dataService;
@@ -50,7 +50,7 @@ namespace DotNetCore2018.WebApi.Controllers
             return View(products);
         }
 
-        [HttpGet]
+        [HttpGet("create")]
         public IActionResult Create()
         {
             ViewBag.Categories = _dataService.GetAll<Category>()
@@ -70,7 +70,7 @@ namespace DotNetCore2018.WebApi.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public IActionResult Create(NewProductViewModel model)
         {

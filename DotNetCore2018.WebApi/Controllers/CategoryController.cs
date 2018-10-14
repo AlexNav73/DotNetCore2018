@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class CategoryController : Controller
     {
         private readonly IDataService _dataService;
@@ -31,6 +31,7 @@ namespace DotNetCore2018.WebApi.Controllers
             _fileService = fileService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             var data = _dataService.GetAll<Category>()
@@ -46,13 +47,13 @@ namespace DotNetCore2018.WebApi.Controllers
             return View(data);
         }
 
-        [HttpGet]
+        [HttpGet("create")]
         public IActionResult Create()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public IActionResult Create(CategoryViewModel model)
         {
@@ -72,13 +73,13 @@ namespace DotNetCore2018.WebApi.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpGet("image")]
         public IActionResult Image(int id)
         {
             _logger.LogInformation($"Category image requested. Category id: {id}");
 
             var category = _dataService.GetBy(new IdSpecification<Category>(id));
-            if (category != null && category.Image != null)
+            if (category?.Image != null)
             {
                 return File(_fileService.OpenFile(category.Image.Value), "image/jpeg");
             }

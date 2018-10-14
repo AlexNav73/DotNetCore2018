@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class SupplierController : Controller
     {
         private readonly IDataService _dataService;
@@ -34,13 +34,13 @@ namespace DotNetCore2018.WebApi.Controllers
             return View(suppliers);
         }
 
-        [HttpGet]
+        [HttpGet("create")]
         public IActionResult Create()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public IActionResult Create(SupplierViewModel model)
         {

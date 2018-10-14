@@ -20,7 +20,7 @@ macro_rules! api_call {
         pub fn $name(id: u32) -> Promise {
             console_error_panic_hook::set_once();
 
-            Fetch::new(Method::Delete, concat!("../api/v1/", $controller, "/", $action))
+            Fetch::new(Method::Delete, concat!("/api/v1/", $controller, "/", $action))
                 .with_query_params(vec![
                     ("id", id.to_string())
                 ])

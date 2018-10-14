@@ -3,6 +3,7 @@ use web_sys::{Request, RequestInit};
 use serde::ser::Serialize;
 use serde_urlencoded::to_string;
 
+use std::fmt;
 use std::borrow::Cow;
 
 pub struct Fetch<'a> {
@@ -25,6 +26,11 @@ impl<'a> Fetch<'a> {
 
     pub fn with_query_params<T: Serialize>(mut self, params: T) -> Self {
         self.uri = format!("{}?{}", self.uri, to_string(params).expect("invalid url params")).into();
+        self
+    }
+
+    pub fn with_param<T: fmt::Display>(mut self, param: T) -> Self {
+        self.uri = format!("{}/{}", self.uri, param).into();
         self
     }
 
