@@ -63,7 +63,7 @@ namespace DotNetCore2018.WebApi.Controllers
                 var category = new Category() 
                 { 
                     Name = model.Name,
-                    Image = _fileService.SaveFile(model.Image.OpenReadStream())
+                    Image = _fileService.SaveFile(model.Image?.OpenReadStream())
                 };
                 _dataService.Add(category);
 
