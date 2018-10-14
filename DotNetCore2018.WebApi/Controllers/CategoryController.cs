@@ -3,6 +3,7 @@ using System.Linq;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Business.Specifications;
 using DotNetCore2018.Data.Entities;
+using DotNetCore2018.WebApi.Filters;
 using DotNetCore2018.WebApi.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
+    [LogAction]
     [Route("[controller]")]
     public class CategoryController : Controller
     {
