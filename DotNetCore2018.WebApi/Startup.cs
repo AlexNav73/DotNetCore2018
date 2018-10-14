@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
+using DotNetCore2018.WebApi.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -58,6 +59,7 @@ namespace DotNetCore2018.WebApi
                 app.UseExceptionHandler("/home/error");
             }
 
+            app.CacheImageFiles();
             app.UseStaticFiles();
             app.UseMvc(ConfigureRoutes);
         }
