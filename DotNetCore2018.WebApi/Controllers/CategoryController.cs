@@ -75,7 +75,7 @@ namespace DotNetCore2018.WebApi.Controllers
             return View();
         }
 
-        [HttpGet("image")]
+        [HttpGet("image/{id}")]
         public IActionResult Image(int id)
         {
             _logger.LogInformation($"Category image requested. Category id: {id}");

@@ -77,7 +77,7 @@ namespace DotNetCore2018.WebApi
                 context.Response.ContentType = "application/wasm";
                 return context.Response.SendFileAsync(fileProvider.GetFileInfo($"{filename}.wasm"));
             });
-            //routeBuilder.MapRoute("images", "images/{id}", defaults: new { controller = "Category", action = "Image" });
+            routeBuilder.MapRoute("images", "images/{id}", defaults: new { controller = "Category", action = "Image" });
             routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
         }
 
