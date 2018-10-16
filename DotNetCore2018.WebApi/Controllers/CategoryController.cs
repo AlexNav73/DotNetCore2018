@@ -13,7 +13,6 @@ using Microsoft.Extensions.Logging;
 namespace DotNetCore2018.WebApi.Controllers
 {
     [LogAction]
-    [Route("[controller]")]
     public class CategoryController : Controller
     {
         private readonly IDataService _dataService;
@@ -75,7 +74,7 @@ namespace DotNetCore2018.WebApi.Controllers
             return View();
         }
 
-        [HttpGet("image/{id}")]
+        [HttpGet]
         public IActionResult Image(int id)
         {
             _logger.LogInformation($"Category image requested. Category id: {id}");

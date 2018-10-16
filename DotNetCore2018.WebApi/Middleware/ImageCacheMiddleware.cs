@@ -5,13 +5,14 @@ using DotNetCore2018.Business.Specifications;
 using DotNetCore2018.Data.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Middleware
 {
     public class ImageCacheMiddleware
     {
         private const string CacheFolder = "cache";
-        private const string CategoryImage = "/category/image";
+        private const string CategoryImage = "/images";
 
         private readonly RequestDelegate _next;
         private readonly IFileProvider _fileProvider;
@@ -29,7 +30,7 @@ namespace DotNetCore2018.WebApi.Middleware
             _fileProvider = new PhysicalFileProvider(_wwwroot);
         }
 
-        public async Task InvokeAsync(HttpContext context, IDataService dataService)
+        public async Task InvokeAsync(HttpContext context, IDataService dataService, ILogger<ImageCacheMiddleware> logger)
         {
             if (context.Request.Path.StartsWithSegments(CategoryImage))
             {
@@ -37,15 +38,18 @@ namespace DotNetCore2018.WebApi.Middleware
                 var file = _fileProvider.GetFileInfo($"/{CacheFolder}/{imageName}.jpeg");
                 if (file.Exists)
                 {
+                    logger.LogTrace("Return image from cache");
                     await context.Response.SendFileAsync(file);
                     return;
                 }
             }
 
+            logger.LogTrace("Image cache missed");
             await _next(context);
 
             if (context.Response.ContentType == "image/jpeg")
             {
+                logger.LogTrace("Save image to cache");
                 await CacheImage(GetImageId(context), dataService);
             }
         }

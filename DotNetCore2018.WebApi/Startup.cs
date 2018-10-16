@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
+using DotNetCore2018.WebApi.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -76,7 +77,7 @@ namespace DotNetCore2018.WebApi
                 context.Response.ContentType = "application/wasm";
                 return context.Response.SendFileAsync(fileProvider.GetFileInfo($"{filename}.wasm"));
             });
-            //routeBuilder.MapRoute("images", "images/{id}", defaults: new { controller = "Category", action = "Image" });
+            routeBuilder.MapRoute("images", "images/{id:int}", defaults: new { controller = "Category", action = "Image" });
             routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
         }
 
