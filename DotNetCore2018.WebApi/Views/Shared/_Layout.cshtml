@@ -21,6 +21,9 @@
 <div class="album py-5 bg-light">
     <div class="container">
         <div class="row">
+            @await Component.InvokeAsync(nameof(Breadcrumb), new { id = 5 })
+        </div>
+        <div class="row">
             @RenderBody()
         </div>
     </div>

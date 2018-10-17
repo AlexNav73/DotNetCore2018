@@ -1,0 +1,10 @@
+@model List<BreadcrumbLink>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+        @foreach (var entry in Model)
+        {
+            <li class="breadcrumb-item"><a href="@entry.Link">@entry.Name</a></li>
+        }
+  </ol>
+</nav>
