@@ -1,24 +1,27 @@
-<!DOCTYPE HTML>
+@{
+    Layout = "~/Views/Shared/_LayoutBase.cshtml";
+}
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-    <link rel="stylesheet" asp-href-include="~/*.css" />
-</head>
-<body>
-    @Html.Partial("_Header")
-    <main>
-        <div class="album py-5 bg-light">
-            <div class="container">
-                <div class="row">
-                    @RenderBody()
-                </div>
-            </div>
+@section header {
+    @if (IsSectionDefined("header")) {
+        RenderSection("header");
+    } else {
+        @Html.Partial("_Header");
+    }
+}
+
+@section footer {
+    @if (IsSectionDefined("footer")) {
+        RenderSection("footer");
+    } else {
+        @Html.Partial("_Footer");
+    }
+}
+
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            @RenderBody()
         </div>
-    </main>
-    @Html.Partial("_Footer")
-    <script asp-src-include="~/*.js"></script>
-    @RenderSection("scripts", required: false)
-</body>
-</html>
+    </div>
+</div>
