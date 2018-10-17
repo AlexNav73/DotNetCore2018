@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.WebApi.Middleware;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -37,6 +39,10 @@ namespace DotNetCore2018.WebApi
             });
             services.AddScoped<IDataService, DataService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddSingleton<MemoryCache>(f => new MemoryCache(new MemoryCacheOptions()
+            {
+                SizeLimit = 10
+            }));
             services.AddMvc();
         }
 
@@ -57,7 +63,11 @@ namespace DotNetCore2018.WebApi
                 app.UseExceptionHandler("/home/error");
             }
 
-            app.CacheImageFiles();
+            app.CacheImageFiles(new ImageCacheOptions()
+            {
+                CacheTo = "cache",
+                ExpireAfter = TimeSpan.FromSeconds(3)
+            });
             app.UseStaticFiles();
             app.UseMvc(ConfigureRoutes);
         }
