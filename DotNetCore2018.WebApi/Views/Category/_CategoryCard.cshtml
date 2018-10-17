@@ -1,7 +1,8 @@
+@using DotNetCore2018.WebApi.HtmlHelpers
 @model CategoryViewModel
 
 <div class="card" style="width: 18rem;">
-    <img src="/images/@Model.Id" class="card-img-top mt-3" style="height: 13rem;" />
+    @Html.ImageLink(Model.Id)
     <div class="card-body">
         <h5 class="card-title">@Model.Id: @Model.Name</h5>
         <a asp-page="/category/edit" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Edit</a>
