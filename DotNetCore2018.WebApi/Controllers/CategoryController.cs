@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
-    [LogAction]
+    [LogAction(false)]
     public class CategoryController : Controller
     {
         private readonly IDataService _dataService;
