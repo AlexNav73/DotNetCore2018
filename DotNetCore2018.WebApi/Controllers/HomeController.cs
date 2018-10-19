@@ -1,6 +1,7 @@
 using System;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Business.Specifications;
+using DotNetCore2018.Core.Breadcrumbs;
 using DotNetCore2018.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
+    [Breadcrumb]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,6 +20,7 @@ namespace DotNetCore2018.WebApi.Controllers
             _logger = logger;
         }
 
+        [Breadcrumb]
         public IActionResult Index()
         {
             return View();

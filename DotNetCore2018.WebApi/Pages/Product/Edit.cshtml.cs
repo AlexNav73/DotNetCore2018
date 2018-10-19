@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Business.Specifications;
+using DotNetCore2018.Core.Breadcrumbs;
+using DotNetCore2018.WebApi.Controllers;
 
 using DbProduct = DotNetCore2018.Data.Entities.Product;
 using DbCategory = DotNetCore2018.Data.Entities.Category;
@@ -14,6 +16,7 @@ using DbSupplier = DotNetCore2018.Data.Entities.Supplier;
 
 namespace DotNetCore2018.WebApi.Pages.Product
 {
+    [Breadcrumb("Edit", Parent = typeof(ProductController))]
     public class EditModel : PageModel
     {
         private readonly IDataService _dataService;

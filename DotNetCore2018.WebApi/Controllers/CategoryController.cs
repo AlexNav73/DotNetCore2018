@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Business.Specifications;
+using DotNetCore2018.Core.Breadcrumbs;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.Filters;
 using DotNetCore2018.WebApi.ViewModels;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
+    [Breadcrumb("Category", Parent = typeof(HomeController))]
     [LogAction(false)]
     public class CategoryController : Controller
     {
@@ -32,6 +34,7 @@ namespace DotNetCore2018.WebApi.Controllers
             _fileService = fileService;
         }
 
+        [Breadcrumb]
         [HttpGet]
         public IActionResult Index()
         {
@@ -48,6 +51,7 @@ namespace DotNetCore2018.WebApi.Controllers
             return View(data);
         }
 
+        [Breadcrumb]
         [HttpGet("create")]
         public IActionResult Create()
         {

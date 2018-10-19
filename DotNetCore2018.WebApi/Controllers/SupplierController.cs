@@ -1,5 +1,6 @@
 using System.Linq;
 using DotNetCore2018.Business.Services.Interfaces;
+using DotNetCore2018.Core.Breadcrumbs;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
+    [Breadcrumb(Parent = typeof(HomeController))]
     [Route("[controller]")]
     public class SupplierController : Controller
     {
@@ -21,6 +23,7 @@ namespace DotNetCore2018.WebApi.Controllers
             _logger = logger;
         }
 
+        [Breadcrumb]
         [HttpGet]
         public IActionResult Index()
         {
@@ -34,6 +37,7 @@ namespace DotNetCore2018.WebApi.Controllers
             return View(suppliers);
         }
 
+        [Breadcrumb]
         [HttpGet("create")]
         public IActionResult Create()
         {

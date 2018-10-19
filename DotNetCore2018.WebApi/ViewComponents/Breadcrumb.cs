@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using DotNetCore2018.Core.Breadcrumbs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.ViewComponents
@@ -21,24 +23,43 @@ namespace DotNetCore2018.WebApi.ViewComponents
             var controller = (string)Url.ActionContext.RouteData.Values["Controller"];
             var action = (string)Url.ActionContext.RouteData.Values["Action"];
 
-            return View("Index", _path[id]);
-        }
-
-        private static readonly List<List<BreadcrumbLink>> _path = new List<List<BreadcrumbLink>>()
-        {
-            new List<BreadcrumbLink>() { new BreadcrumbLink("Home", "") },
-            new List<BreadcrumbLink>() 
-            { 
-                new BreadcrumbLink("Home", ""),
-                new BreadcrumbLink("Category", "")
-            },
-            new List<BreadcrumbLink>() 
-            { 
-                new BreadcrumbLink("Home", ""),
-                new BreadcrumbLink("Category", ""),
-                new BreadcrumbLink("Create new", "")
+            var page = (string)Url.ActionContext.RouteData.Values["page"];
+            if (page != null)
+            {
+                var pageComponents = page.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                if (pageComponents.Length == 2)
+                {
+                    controller = pageComponents[0];
+                    action = pageComponents[1];
+                }
             }
-        };
+
+            var tree = BreadcrumbCollector.Collect(Assembly.GetExecutingAssembly());
+            var path = BreadcrumbPathResolver.GetPath(tree, controller, action);
+
+            var links = new List<BreadcrumbLink>();
+            if (path.Count >= 2)
+            {
+                var actionNode = path[0];
+                var controllerNode = path[1];
+                if (actionNode.Name.Equals("Index", StringComparison.OrdinalIgnoreCase))
+                {
+                    links.Add(new BreadcrumbLink(controllerNode.Name, Url.Action(actionNode.Name, controllerNode.Name)));
+                }
+                else
+                {
+                    links.Add(new BreadcrumbLink(actionNode.Name, Url.Action(actionNode.Name, controllerNode.Name)));
+                    links.Add(new BreadcrumbLink(controllerNode.Name, Url.Action("Index", controllerNode.Name)));
+                }
+            }
+            for (int i = 2; i < path.Count; i++)
+            {
+                links.Add(new BreadcrumbLink(path[i].Name, Url.Action("Index", path[i].Name)));
+            }
+            links.Reverse();
+
+            return View("Index", links);
+        }
     }
 
     public class BreadcrumbLink
