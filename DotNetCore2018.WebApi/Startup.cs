@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.WebApi.Middleware;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+using NSwag.AspNetCore;
 
 namespace DotNetCore2018.WebApi
 {
@@ -44,6 +46,7 @@ namespace DotNetCore2018.WebApi
             {
                 SizeLimit = 10
             }));
+            services.AddSwagger();
             services.AddMvc();
         }
 
@@ -64,6 +67,7 @@ namespace DotNetCore2018.WebApi
                 app.UseExceptionHandler("/home/error");
             }
 
+            app.UseSwaggerUi3WithApiExplorer();
             app.CacheImageFiles(new ImageCacheOptions()
             {
                 CacheTo = "cache",

@@ -14,7 +14,7 @@ use self::fetch::{Fetch, Method};
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-macro_rules! api_call {
+macro_rules! delete_api_call {
     ($name:ident, $controller:expr, $action:expr) => {
         #[wasm_bindgen]
         pub fn $name(id: u32) -> Promise {
@@ -29,6 +29,6 @@ macro_rules! api_call {
     }
 }
 
-api_call!(ui_category_delete, "categories", "delete");
-api_call!(ui_product_delete, "products", "delete");
-api_call!(ui_supplier_delete, "suppliers", "delete");
+delete_api_call!(ui_category_delete, "categories", "delete");
+delete_api_call!(ui_product_delete, "products", "delete");
+delete_api_call!(ui_supplier_delete, "suppliers", "delete");
