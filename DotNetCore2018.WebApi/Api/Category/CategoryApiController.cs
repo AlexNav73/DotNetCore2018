@@ -4,11 +4,13 @@ using DbCategory = DotNetCore2018.Data.Entities.Category;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using System.Linq;
+using DotNetCore2018.WebApi.ViewModels;
 
 namespace DotNetCore2018.WebApi.Api.Category
 {
     [Produces("application/json")]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/categories")]
     public sealed class CategoryApiController : ControllerBase
     {
         private readonly IDataService _dataService;
@@ -37,6 +39,18 @@ namespace DotNetCore2018.WebApi.Api.Category
             }
 
             return NotFound();
+        }
+
+        [HttpGet]
+        public CategoryViewModel[] GetAll()
+        {
+            return _dataService.GetAll<DbCategory>()
+                .Select(x => new CategoryViewModel()
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                })
+                .ToArray();
         }
     }
 }

@@ -41,7 +41,7 @@ namespace DotNetCore2018.WebApi.ViewComponents
                 }
             }
 
-            var path = BreadcrumbPathResolver.GetPath(_tree, controller, action);
+            var path = await Task.Run(() => BreadcrumbPathResolver.GetPath(_tree, controller, action));
 
             var links = new List<BreadcrumbLink>();
             if (path.Count >= 2)

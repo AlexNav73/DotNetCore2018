@@ -29,6 +29,6 @@ macro_rules! api_call {
     }
 }
 
-api_call!(ui_category_delete, "categoryapi", "delete");
-api_call!(ui_product_delete, "productapi", "delete");
-api_call!(ui_supplier_delete, "supplierapi", "delete");
+api_call!(ui_category_delete, "categories", "delete");
+api_call!(ui_product_delete, "products", "delete");
+api_call!(ui_supplier_delete, "suppliers", "delete");

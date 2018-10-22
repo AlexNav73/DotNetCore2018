@@ -1,13 +1,17 @@
+using System.Linq;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Business.Specifications;
+using DotNetCore2018.WebApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+
 using DbProduct = DotNetCore2018.Data.Entities.Product;
 
 namespace DotNetCore2018.WebApi.Api.Product
 {
     [Produces("application/json")]
-    [Route("api/v1/[controller]/[action]")]
+    [Route("api/v1/products")]
     public sealed class ProductApiController : ControllerBase
     {
         private readonly IDataService _dataService;
@@ -35,6 +39,30 @@ namespace DotNetCore2018.WebApi.Api.Product
             }
 
             return NotFound();
+        }
+
+        [HttpGet]
+        public ProductViewModel[] GetAll()
+        {
+            return _dataService.GetAll<DbProduct>()
+                .Include(x => x.Category)
+                .Include(x => x.Supplier)
+                .Select(x => new ProductViewModel()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Category = new CategoryViewModel()
+                    {
+                        Id = x.Category.Id,
+                        Name = x.Category.Name
+                    },
+                    Supplier = new SupplierViewModel()
+                    {
+                        Id = x.Supplier.Id,
+                        Name = x.Supplier.Name
+                    }
+                })
+                .ToArray();
         }
     }
 }

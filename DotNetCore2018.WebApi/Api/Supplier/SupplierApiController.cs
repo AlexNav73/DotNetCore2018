@@ -7,7 +7,7 @@ using DbSupplier = DotNetCore2018.Data.Entities.Supplier;
 namespace DotNetCore2018.WebApi.Api.Supplier
 {
     [Produces("application/json")]
-    [Route("api/v1/[controller]/[action]")]
+    [Route("api/v1/suppliers")]
     public sealed class SupplierApiController : ControllerBase
     {
         private readonly IDataService _dataService;
