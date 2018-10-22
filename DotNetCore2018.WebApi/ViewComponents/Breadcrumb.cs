@@ -25,7 +25,7 @@ namespace DotNetCore2018.WebApi.ViewComponents
             _logger = logger;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int id)
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             var controller = (string)Url.ActionContext.RouteData.Values["Controller"];
             var action = (string)Url.ActionContext.RouteData.Values["Action"];

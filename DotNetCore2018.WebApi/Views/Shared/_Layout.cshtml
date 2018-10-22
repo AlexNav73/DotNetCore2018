@@ -20,9 +20,13 @@
 
 <div class="album py-5 bg-light">
     <div class="container">
-        <div class="row">
-            @await Component.InvokeAsync(nameof(Breadcrumb), new { id = 5 })
-        </div>
+        @if (IsSectionDefined("breadcrumbs")) {
+            @RenderSection("breadcrumbs");
+        } else {
+            <div class="row">
+                @await Component.InvokeAsync(nameof(Breadcrumb))
+            </div>
+        }
         <div class="row">
             @RenderBody()
         </div>
