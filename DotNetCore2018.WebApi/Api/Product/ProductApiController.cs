@@ -64,5 +64,46 @@ namespace DotNetCore2018.WebApi.Api.Product
                 })
                 .ToArray();
         }
+
+        [HttpPut("create")]
+        public IActionResult Create([FromBody] NewProductViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _logger.LogInformation("Post message received by create product method");
+
+                var product = new DbProduct() 
+                { 
+                    Name = model.Name,
+                    SupplierId = model.SupplierId,
+                    CategoryId = model.CategoryId
+                };
+                _dataService.Add(product);
+                return Ok();
+            }
+            return StatusCode(422);
+        }
+
+        [HttpPost("update")]
+        public IActionResult Update([FromBody] UpdateProductViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var category = _dataService.GetBy(new IdSpecification<Data.Entities.Category>(model.CategoryId));
+                var supplier = _dataService.GetBy(new IdSpecification<Data.Entities.Supplier>(model.SupplierId));
+                if (category != null || supplier != null)
+                {
+                    _dataService.Update(new DbProduct() 
+                    {
+                        Id = model.Id,
+                        Name = model.Name,
+                        Category = category,
+                        Supplier = supplier
+                    });
+                    return Ok();
+                }
+            }
+            return StatusCode(422);
+        }
     }
 }
