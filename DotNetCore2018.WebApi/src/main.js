@@ -9,8 +9,17 @@ window.call_rust = function (callback, continuation = x => location.reload()) {
     ui.then(callback).then(continuation);
 }
 
-$('#pushme').click(function(e) {
+$('#showCategories').click(function(e) {
     e.preventDefault();
     
-    window.call_rust(x => x.ui_show_list($('#idField')), x => {});
+    window.call_rust(x => x.ui_show_list($('#categoryList')), x => {});
+});
+
+$('#showProducts').click(function (e) {
+    e.preventDefault();
+
+    var container = $('#productsList');
+    fetch("/api/v1/products")
+        .then(resp => resp.json())
+        .then(json => container.text(JSON.stringify(json)));
 });
