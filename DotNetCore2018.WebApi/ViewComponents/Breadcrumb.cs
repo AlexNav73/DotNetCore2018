@@ -11,7 +11,14 @@ namespace DotNetCore2018.WebApi.ViewComponents
 {
     public class Breadcrumb : ViewComponent
     {
+        private static readonly BreadcrumbNode _tree;
+
         private readonly ILogger<Breadcrumb> _logger;
+
+        static Breadcrumb()
+        {
+            _tree = BreadcrumbCollector.Collect(Assembly.GetExecutingAssembly());
+        }
 
         public Breadcrumb(ILogger<Breadcrumb> logger)
         {
@@ -34,8 +41,7 @@ namespace DotNetCore2018.WebApi.ViewComponents
                 }
             }
 
-            var tree = BreadcrumbCollector.Collect(Assembly.GetExecutingAssembly());
-            var path = BreadcrumbPathResolver.GetPath(tree, controller, action);
+            var path = BreadcrumbPathResolver.GetPath(_tree, controller, action);
 
             var links = new List<BreadcrumbLink>();
             if (path.Count >= 2)
