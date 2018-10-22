@@ -11,10 +11,6 @@ window.call_rust = function (callback, continuation = x => location.reload()) {
 
 $('#pushme').click(function(e) {
     e.preventDefault();
-
-    window.rust.then(x => x.ui_find_elem_by_id($('#pushme'), "categoryId"))
-        .then(x => console.log("Deleted"))
-        .catch(e => console.warn(e));
-    window.rust.then(x => x.ui_parse_val($('#idField'), "dsadsa"))
-        .then(x => console.log(x));
+    
+    window.call_rust(x => x.ui_show_list($('#idField')), x => {});
 });
