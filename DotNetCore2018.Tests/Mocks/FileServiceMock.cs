@@ -9,6 +9,10 @@ namespace DotNetCore2018.Tests.Mocks
 {
     internal class FileServiceMock : IFileService
     {
+        public void Delete(Guid? image)
+        {
+        }
+
         public Stream NoImageFile()
         {
             throw new NotImplementedException();

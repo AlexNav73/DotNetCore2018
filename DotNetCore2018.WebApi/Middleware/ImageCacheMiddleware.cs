@@ -118,6 +118,10 @@ namespace DotNetCore2018.WebApi.Middleware
 
         private string GetImageId(HttpContext context)
         {
+            if (context.Request.Query.TryGetValue("id", out var value))
+            {
+                return value.ToArray()[0];
+            }
             return context.Request.Path
                 .ToUriComponent()
                 .Replace(CategoryImage + "/", string.Empty);

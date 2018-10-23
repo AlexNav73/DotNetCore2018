@@ -8,5 +8,6 @@ namespace DotNetCore2018.Business.Services.Interfaces
         Guid? SaveFile(Stream file);
         Stream OpenFile(Guid imageName);
         Stream NoImageFile();
+        void Delete(Guid? image);
     }
 }

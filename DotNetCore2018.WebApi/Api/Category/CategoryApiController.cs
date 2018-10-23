@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Linq;
 using DotNetCore2018.WebApi.ViewModels;
+using System;
+using Microsoft.AspNetCore.Http;
 
 namespace DotNetCore2018.WebApi.Api.Category
 {
@@ -14,13 +16,16 @@ namespace DotNetCore2018.WebApi.Api.Category
     public sealed class CategoryApiController : ControllerBase
     {
         private readonly IDataService _dataService;
+        private readonly IFileService _fileService;
         private readonly ILogger<CategoryApiController> _logger;
 
         public CategoryApiController(
             IDataService dataService,
+            IFileService fileService,
             ILogger<CategoryApiController> logger)
         {
             _dataService = dataService;
+            _fileService = fileService;
             _logger = logger;
         }
 
@@ -35,6 +40,7 @@ namespace DotNetCore2018.WebApi.Api.Category
             {
                 _logger.LogWarning("Category found");
                 _dataService.Delete(category);
+                _fileService.Delete(category.Image);
                 return Accepted();
             }
 
@@ -51,6 +57,38 @@ namespace DotNetCore2018.WebApi.Api.Category
                     Name = x.Name
                 })
                 .ToArray();
+        }
+
+        [HttpGet("image_file")]
+        public IActionResult ImageFile([FromQuery] int id)
+        {
+            var category = _dataService.GetBy(new IdSpecification<DbCategory>(id));
+            if (category != null && category.Image != null)
+            {
+                return File(_fileService.OpenFile(category.Image.Value), "image/jpeg");
+            }
+            return NotFound();
+        }
+
+        [HttpPost("update_image"), DisableRequestSizeLimit]
+        public IActionResult UpdateImage([FromQuery] int id, [FromForm] IFormFile file)
+        {
+            try
+            {
+                var category = _dataService.GetBy(new IdSpecification<DbCategory>(id));
+                if (file != null && category != null)
+                {
+                    category.Image = _fileService.SaveFile(file.OpenReadStream());
+                    _dataService.Update(category);
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while uploading file");
+                return StatusCode(500);
+            }
         }
     }
 }

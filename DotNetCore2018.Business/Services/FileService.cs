@@ -13,7 +13,7 @@ namespace DotNetCore2018.Business.Services
             if (file != null)
             {
                 imageName = Guid.NewGuid();
-                using (var writer = File.OpenWrite($"./wwwroot/images/{imageName}.jpeg"))
+                using (var writer = File.OpenWrite(Path(imageName.Value)))
                 {
                     file.CopyTo(writer);
                 }
@@ -22,8 +22,25 @@ namespace DotNetCore2018.Business.Services
             return imageName;
         }
 
-        public Stream OpenFile(Guid imageName) => File.OpenRead($"./wwwroot/images/{imageName}.jpeg");
+        public Stream OpenFile(Guid imageName)
+        {
+            if (File.Exists(Path(imageName)))
+            {
+                return File.OpenRead(Path(imageName));
+            }
+            return NoImageFile();
+        }
 
-        public Stream NoImageFile() => File.OpenRead($"./wwwroot/images/NoImage.jpg");
+        public Stream NoImageFile() => File.OpenRead(Path("NoImage", "jpg"));
+
+        public void Delete(Guid? image)
+        {
+            if (image != null)
+            {
+                File.Delete(Path(image.Value));
+            }
+        }
+
+        private string Path<T>(T name, string ext = "jpeg") => $"./wwwroot/images/{name}.{ext}";
     }
 }
