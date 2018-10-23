@@ -75,6 +75,10 @@ namespace DotNetCore2018.WebApi.Api.Category
         {
             try
             {
+                if (file == null)
+                {
+                    return StatusCode(422);
+                }
                 var category = _dataService.GetBy(new IdSpecification<DbCategory>(id));
                 if (file != null && category != null)
                 {
