@@ -29,6 +29,9 @@ namespace DotNetCore2018.WebApi.Api.Category
             _logger = logger;
         }
 
+        /// <summary>
+        /// Delete category by Id
+        /// </summary>
         [HttpDelete("delete")]
         [ProducesResponseType(202)]
         public IActionResult DeleteById(int id)

@@ -15,7 +15,14 @@ namespace DotNetCore2018.Business.Services
                 imageName = Guid.NewGuid();
                 using (var writer = File.OpenWrite(Path(imageName.Value)))
                 {
-                    file.CopyTo(writer);
+                    try
+                    {
+                        file.CopyTo(writer);
+                    }
+                    finally
+                    {
+                        file.Dispose();
+                    }
                 }
             }
 
