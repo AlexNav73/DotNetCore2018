@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using DotNetCore2018.SwaggerClient;
 
 namespace DotNetCore2018.ConsoleApp
 {
@@ -23,6 +24,13 @@ namespace DotNetCore2018.ConsoleApp
                     Console.WriteLine("Products: ");
                     Console.WriteLine(response.Content.ReadAsStringAsync().Result);
                 }
+            }
+
+            var categoryClient = new DotNetCore2018CategoryApiClient();
+            var categories = categoryClient.GetAllAsync().Result;
+            foreach (var category in categories)
+            {
+                Console.WriteLine($"Category {{ Id: {category.Id}, Name: {category.Name} }}");
             }
         }
     }

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Breadcrumb("Category", Parent = typeof(HomeController))]
     [LogAction(false)]
     public class CategoryController : Controller

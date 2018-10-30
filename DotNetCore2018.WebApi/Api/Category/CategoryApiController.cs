@@ -59,6 +59,7 @@ namespace DotNetCore2018.WebApi.Api.Category
                 .ToArray();
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("image_file")]
         public IActionResult ImageFile([FromQuery] int id)
         {
@@ -70,6 +71,7 @@ namespace DotNetCore2018.WebApi.Api.Category
             return NotFound();
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost("update_image"), DisableRequestSizeLimit]
         public IActionResult UpdateImage([FromQuery] int id, [FromForm] IFormFile file)
         {

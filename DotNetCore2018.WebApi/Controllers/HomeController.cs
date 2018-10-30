@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Breadcrumb]
     public class HomeController : Controller
     {
