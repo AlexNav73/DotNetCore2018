@@ -5,8 +5,7 @@
 }
 
 <div>
-    <form method="POST" enctype="multipart/form-data">
-        @Html.AntiForgeryToken()
+    <form asp-action="Create" method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label asp-for="Name"></label>
             <input asp-for="Name" class="form-control"/>
