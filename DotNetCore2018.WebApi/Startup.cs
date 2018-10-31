@@ -7,6 +7,7 @@ using DotNetCore2018.WebApi.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -22,10 +23,12 @@ namespace DotNetCore2018.WebApi
     public class Startup
     {
         private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _env;
 
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration, ILogger<Startup> logger, IHostingEnvironment env)
         {
             _configuration = configuration;
+            _env = env;
 
             var logConfig = configuration.GetSection("Logging");
             var logLevelConfig = logConfig.GetSection("LogLevel");
@@ -48,6 +51,10 @@ namespace DotNetCore2018.WebApi
             }));
             services.AddSwagger();
             services.AddMvc();
+            if (!_env.IsDevelopment())
+            {
+                services.Configure<MvcOptions>(o => o.Filters.Add(new RequireHttpsAttribute()));
+            }
         }
 
         public void Configure(
