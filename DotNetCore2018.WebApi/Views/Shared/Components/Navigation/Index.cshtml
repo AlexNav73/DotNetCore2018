@@ -1,0 +1,18 @@
+@model bool
+
+@if (Model)
+{
+    <div id="navbarHeader" class="bg-dark collapse" style="">
+        <div class="container">
+            <div class="row">
+                <a asp-action="index" asp-controller="category" class="p-2 text-white">Category</a>
+            </div>
+            <div class="row">
+                <a asp-action="index" asp-controller="product" class="p-2 text-white">Products</a>
+            </div>
+            <div class="row">
+                <a asp-action="index" asp-controller="supplier" class="p-2 text-white">Suppliers</a>
+            </div>
+        </div>
+    </div>
+}

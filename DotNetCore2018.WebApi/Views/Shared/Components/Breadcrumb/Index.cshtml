@@ -1,11 +1,14 @@
 @model List<BreadcrumbLink>
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-        @for (int i = 0; i < Model.Count - 1; i++)
-        {
-            <li class="breadcrumb-item"><a href="@Model[i].Link">@Model[i].Name</a></li>
-        }
-        <li class="breadcrumb-item active" aria-current="page">@Model[Model.Count - 1].Name</li>
-  </ol>
-</nav>
+@if (Model.Count > 0)
+{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            @for (int i = 0; i < Model.Count - 1; i++)
+            {
+                <li class="breadcrumb-item"><a href="@Model[i].Link">@Model[i].Name</a></li>
+            }
+            <li class="breadcrumb-item active" aria-current="page">@Model[Model.Count - 1].Name</li>
+        </ol>
+    </nav>
+}

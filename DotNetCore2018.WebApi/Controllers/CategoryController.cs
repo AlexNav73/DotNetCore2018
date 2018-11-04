@@ -6,6 +6,7 @@ using DotNetCore2018.Core.Breadcrumbs;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.Filters;
 using DotNetCore2018.WebApi.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
+    [Authorize]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Breadcrumb("Category", Parent = typeof(HomeController))]
     [LogAction(false)]

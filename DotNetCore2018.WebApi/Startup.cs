@@ -3,10 +3,13 @@ using System.IO;
 using System.Reflection;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
+using DotNetCore2018.Data;
+using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
@@ -43,8 +46,10 @@ namespace DotNetCore2018.WebApi
             {
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddScoped<IAppContext, Data.AppContext>();
             services.AddScoped<IDataService, DataService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IUserStore<User>, UserStore>();
             services.AddSingleton<MemoryCache>(f => new MemoryCache(new MemoryCacheOptions()
             {
                 SizeLimit = 10
@@ -55,6 +60,9 @@ namespace DotNetCore2018.WebApi
             {
                 services.Configure<MvcOptions>(o => o.Filters.Add(new RequireHttpsAttribute()));
             }
+            services.AddIdentityCore<User>(o => {});
+            services.AddAuthentication(Constants.Security.Cookie)
+                .AddCookie(Constants.Security.Cookie, o => o.LoginPath = "/Authentication/Login");
         }
 
         public void Configure(
@@ -74,6 +82,7 @@ namespace DotNetCore2018.WebApi
                 app.UseExceptionHandler("/home/error");
             }
 
+            app.UseAuthentication();
             app.UseSwaggerUi3WithApiExplorer();
             app.CacheImageFiles(new ImageCacheOptions()
             {

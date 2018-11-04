@@ -1,22 +1,11 @@
 <header>
-    <div id="navbarHeader" class="bg-dark collapse" style="">
-        <div class="container">
-            <div class="row">
-                <a asp-action="index" asp-controller="category" class="p-2 text-white">Category</a>
-            </div>
-            <div class="row">
-                <a asp-action="index" asp-controller="product" class="p-2 text-white">Products</a>
-            </div>
-            <div class="row">
-                <a asp-action="index" asp-controller="supplier" class="p-2 text-white">Suppliers</a>
-            </div>
-        </div>
-    </div>
+    @await Component.InvokeAsync(nameof(Navigation))
     <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container d-flex justify-content-between">
             <a asp-action="index" asp-controller="home" class="p-2 text-white">Home</a>
             <div>
-                <a href="#" class="btn btn-light">Sign up</a>
+                <a asp-action="Login" asp-controller="Authentication" class="btn btn-light">Sign in</a>
+                <a asp-action="Register" asp-controller="Authentication" class="btn btn-light">Sign up</a>
                 <button class="navbar-toggler collapsed" 
                         type="button" 
                         data-toggle="collapse" 

@@ -3,11 +3,13 @@ using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Core.Breadcrumbs;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
+    [Authorize]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Breadcrumb(Parent = typeof(HomeController))]
     [Route("[controller]")]
