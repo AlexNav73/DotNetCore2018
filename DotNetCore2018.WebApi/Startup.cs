@@ -50,9 +50,10 @@ namespace DotNetCore2018.WebApi
             services.AddScoped<IDataService, DataService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IUserStore<User>, UserStore>();
+            services.AddScoped<SignInManager<User>>();
             services.AddSingleton<MemoryCache>(f => new MemoryCache(new MemoryCacheOptions()
             {
-                SizeLimit = 10
+                SizeLimit = 30
             }));
             services.AddSwagger();
             services.AddMvc();
@@ -60,9 +61,23 @@ namespace DotNetCore2018.WebApi
             {
                 services.Configure<MvcOptions>(o => o.Filters.Add(new RequireHttpsAttribute()));
             }
-            services.AddIdentityCore<User>(o => {});
-            services.AddAuthentication(Constants.Security.Cookie)
-                .AddCookie(Constants.Security.Cookie, o => o.LoginPath = "/Authentication/Login");
+            services.AddIdentityCore<User>(o => 
+            {
+                o.SignIn.RequireConfirmedEmail = false;
+                if (_env.IsDevelopment())
+                {
+                    o.Password.RequireDigit = false;
+                    o.Password.RequiredLength = 5;
+                    o.Password.RequiredUniqueChars = 0;
+                    o.Password.RequireLowercase = false;
+                    o.Password.RequireNonAlphanumeric = false;
+                    o.Password.RequireUppercase = false;
+
+                    o.User.RequireUniqueEmail = false;
+                }
+            });
+            services.AddAuthentication(IdentityConstants.ApplicationScheme)
+                .AddCookie(IdentityConstants.ApplicationScheme, o => o.LoginPath = "/Authentication/Login");
         }
 
         public void Configure(
@@ -87,7 +102,7 @@ namespace DotNetCore2018.WebApi
             app.CacheImageFiles(new ImageCacheOptions()
             {
                 CacheTo = "cache",
-                ExpireAfter = TimeSpan.FromSeconds(3)
+                ExpireAfter = TimeSpan.FromMinutes(30)
             });
             app.UseStaticFiles();
             app.UseMvc(ConfigureRoutes);

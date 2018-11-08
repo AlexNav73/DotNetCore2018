@@ -4,8 +4,7 @@
         <div class="container d-flex justify-content-between">
             <a asp-action="index" asp-controller="home" class="p-2 text-white">Home</a>
             <div>
-                <a asp-action="Login" asp-controller="Authentication" class="btn btn-light">Sign in</a>
-                <a asp-action="Register" asp-controller="Authentication" class="btn btn-light">Sign up</a>
+                @await Component.InvokeAsync(nameof(UserSignInOptions))
                 <button class="navbar-toggler collapsed" 
                         type="button" 
                         data-toggle="collapse" 

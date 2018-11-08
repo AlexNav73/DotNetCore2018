@@ -73,9 +73,15 @@ namespace DotNetCore2018.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Email");
+
+                    b.Property<bool>("EmailConfirmed");
+
                     b.Property<string>("HashedPassword");
 
                     b.Property<string>("NormalizedUserName");
+
+                    b.Property<string>("NormilizedEmail");
 
                     b.Property<string>("UserName");
 

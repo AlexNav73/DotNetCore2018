@@ -11,8 +11,8 @@ using System;
 namespace DotNetCore2018.Data.Migrations
 {
     [DbContext(typeof(AppContext))]
-    [Migration("20181104182834_AddedUserTable")]
-    partial class AddedUserTable
+    [Migration("20181108123751_AddUserTable")]
+    partial class AddUserTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -74,9 +74,15 @@ namespace DotNetCore2018.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Email");
+
+                    b.Property<bool>("EmailConfirmed");
+
                     b.Property<string>("HashedPassword");
 
                     b.Property<string>("NormalizedUserName");
+
+                    b.Property<string>("NormilizedEmail");
 
                     b.Property<string>("UserName");
 

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetCore2018.Business.Services
 {
-    public class UserStore : IUserStore<User>, IUserPasswordStore<User>
+    public class UserStore : IUserStore<User>, IUserPasswordStore<User>, IUserEmailStore<User>
     {
         private readonly IAppContext _context;
 
@@ -97,6 +97,44 @@ namespace DotNetCore2018.Business.Services
         public Task<bool> HasPasswordAsync(User user, CancellationToken cancellationToken)
         {
             return Task.FromResult(true);
+        }
+
+        public Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
+        {
+            user.Email = email;
+            return Task.CompletedTask;
+        }
+
+        public Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.Email);
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.EmailConfirmed);
+        }
+
+        public Task SetEmailConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
+        {
+            user.EmailConfirmed = confirmed;
+            return Task.CompletedTask;
+        }
+
+        public Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        {
+            return _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(normalizedEmail));
+        }
+
+        public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.NormilizedEmail);
+        }
+
+        public Task SetNormalizedEmailAsync(User user, string normalizedEmail, CancellationToken cancellationToken)
+        {
+            user.NormilizedEmail = normalizedEmail;
+            return Task.CompletedTask;
         }
     }
 }
