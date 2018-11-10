@@ -1,9 +1,7 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
-using DotNetCore2018.Data.Entities;
+using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.WebApi.ViewModels;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,17 +13,14 @@ namespace DotNetCore2018.WebApi.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class AuthenticationController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly IAuthenticationService _authenticationService;
         private readonly ILogger<AuthenticationController> _logger;
 
         public AuthenticationController(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
+            IAuthenticationService authenticationService,
             ILogger<AuthenticationController> logger)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _authenticationService = authenticationService;
             _logger = logger;
         }
 
@@ -43,29 +38,14 @@ namespace DotNetCore2018.WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(model.UserName);
-                if (user == null)
+                var result = await _authenticationService.RegisterUser(model.UserName, model.Email, model.Password);
+                if (result.Errors.Any())
                 {
-                    var result = await _userManager.CreateAsync(new User()
+                    foreach (var error in result.Errors)
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        UserName = model.UserName,
-                        Email = model.Email
-                    }, model.Password);
-
-                    if (result.Errors.Any())
-                    {
-                        _logger.LogWarning($"User [{model.UserName}] was not registered");
-                        foreach (var error in result.Errors)
-                        {
-                            ModelState.AddModelError(error.Code, error.Description);
-                            return View();
-                        }
+                        ModelState.AddModelError(error.Code, error.Description);
+                        return View();
                     }
-
-                    await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
-
-                    _logger.LogInformation($"User [{model.UserName}] was registered");
                 }
                 return RedirectToAction("Index", "Home");
             }
@@ -86,8 +66,7 @@ namespace DotNetCore2018.WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
-                if (result.Succeeded)
+                if (await _authenticationService.LoginUser(model.UserName, model.Password))
                 {
                     return RedirectToAction("Index", "Home");
                 }
@@ -99,7 +78,7 @@ namespace DotNetCore2018.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            await _authenticationService.LogoutUser(HttpContext);
             return RedirectToAction("Index", "Home");
         }
     }
