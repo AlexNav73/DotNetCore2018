@@ -87,9 +87,7 @@ namespace DotNetCore2018.Business.Services
             => await context.SignOutAsync(IdentityConstants.ApplicationScheme);
 
         private async Task SendEmailAsync(string email, string loginUrl)
-        {
-            await _emailSender.SendEmailAsync(email, Subject(), Body(loginUrl));
-        }
+            => await _emailSender.SendEmailAsync(email, Subject(), Body(loginUrl));
 
         private string Body(string loginUrl)
             => $"To complete registration, follow <a href=\"{loginUrl}\">this link</a>";

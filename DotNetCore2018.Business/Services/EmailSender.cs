@@ -18,17 +18,16 @@ namespace DotNetCore2018.Business.Services
 
         public Task SendEmailAsync(string email, string subject, string body)
         {
-            var client = new SmtpClient(_config.Host, _config.Port)
+            var credentials = new NetworkCredential(_config.UserName, _config.Password);
+            using (var client = new SmtpClient(_config.Host, _config.Port) { Credentials = credentials, EnableSsl = _config.EnableSSL })
             {
-                Credentials = new NetworkCredential(_config.UserName, _config.Password),
-                EnableSsl = _config.EnableSSL
-            };
-            var message = new MailMessage(_config.UserName, email, subject, body) 
-            { 
-                IsBodyHtml = true 
-            };
+                var message = new MailMessage(_config.UserName, email, subject, body)
+                {
+                    IsBodyHtml = true
+                };
 
-            return client.SendMailAsync(message);
+                return client.SendMailAsync(message);
+            }
         }
     }
 }
