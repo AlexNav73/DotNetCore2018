@@ -6,6 +6,7 @@ using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Data;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.Middleware;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -78,8 +79,13 @@ namespace DotNetCore2018.WebApi
                     o.User.RequireUniqueEmail = false;
                 }
             });
-            services.AddAuthentication(IdentityConstants.ApplicationScheme)
-                .AddCookie(IdentityConstants.ApplicationScheme, o => o.LoginPath = "/Authentication/Login");
+            services.AddAuthentication(o => {
+                o.DefaultScheme = IdentityConstants.ApplicationScheme;
+                o.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+                .AddAzureAd(options => _configuration.Bind("AzureAd", options))
+                .AddCookie();
+                //.AddCookie(IdentityConstants.ApplicationScheme, o => o.LoginPath = "/Authentication/Login");
         }
 
         public void Configure(
