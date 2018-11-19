@@ -2,6 +2,8 @@
 
 ASP.NET Core project for mentoring program
 
+[![Build Status](https://dev.azure.com/alexnav73/DotNetCore2018/_apis/build/status/AlexNav73.DotNetCore2018)](https://dev.azure.com/alexnav73/DotNetCore2018/_build/latest?definitionId=2)
+
 # Building
 
 ## ASP.NET Core project building
