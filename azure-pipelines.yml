@@ -10,5 +10,5 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+- script: dotnet build --configuration $(buildConfiguration) ./DotNetCore2018.WebApi/
+  displayName: 'dotnet build $(buildConfiguration)' ./DotNetCore2018.WebApi/
