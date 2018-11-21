@@ -11,18 +11,18 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.Business.Services
 {
-    public class AuthentincationService : Interfaces.IAuthenticationService
+    public class AuthenticationService : Interfaces.IAuthenticationService
     {
         private readonly IEmailSender _emailSender;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly ILogger<AuthentincationService> _logger;
+        private readonly ILogger<AuthenticationService> _logger;
 
-        public AuthentincationService(
+        public AuthenticationService(
             IEmailSender emailSender,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            ILogger<AuthentincationService> logger)
+            ILogger<AuthenticationService> logger)
         {
             _emailSender = emailSender;
             _userManager = userManager;

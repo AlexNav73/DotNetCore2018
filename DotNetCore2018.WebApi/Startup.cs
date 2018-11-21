@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
@@ -49,7 +49,7 @@ namespace DotNetCore2018.WebApi
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IUserStore<User>, UserStore>();
             services.AddScoped<SignInManager<User>>();
-            services.AddScoped<IAuthenticationService, AuthentincationService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddSingleton(f => new MemoryCache(new MemoryCacheOptions()
             {
