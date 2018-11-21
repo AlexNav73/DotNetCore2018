@@ -51,7 +51,7 @@ namespace DotNetCore2018.WebApi
             services.AddScoped<SignInManager<User>>();
             services.AddScoped<IAuthenticationService, AuthentincationService>();
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddSingleton<MemoryCache>(f => new MemoryCache(new MemoryCacheOptions()
+            services.AddSingleton(f => new MemoryCache(new MemoryCacheOptions()
             {
                 SizeLimit = 30
             }));
