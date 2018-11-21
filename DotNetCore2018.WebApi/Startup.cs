@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.IO;
-using System.Reflection;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Data;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -97,8 +95,10 @@ namespace DotNetCore2018.WebApi
             else
             {
                 app.UseExceptionHandler("/home/error");
+                app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseSwaggerUi3WithApiExplorer();
             app.CacheImageFiles(new ImageCacheOptions()
