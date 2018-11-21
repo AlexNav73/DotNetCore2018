@@ -99,7 +99,6 @@ namespace DotNetCore2018.WebApi
             }
 
             app.UseHttpsRedirection();
-            app.UseAuthentication();
             app.UseSwaggerUi3WithApiExplorer();
             app.CacheImageFiles(new ImageCacheOptions()
             {
@@ -107,6 +106,8 @@ namespace DotNetCore2018.WebApi
                 ExpireAfter = TimeSpan.FromMinutes(30)
             });
             app.UseStaticFiles();
+
+            app.UseAuthentication();
             app.UseMvc(ConfigureRoutes);
         }
 
