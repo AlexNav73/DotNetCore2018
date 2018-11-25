@@ -22,17 +22,20 @@ namespace DotNetCore2018.WebApi.Controllers
         private readonly IEmailSender _emailSender;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly RoleManager<UserRole> _roleManager;
         private readonly ILogger<AuthenticationController> _logger;
 
         public AuthenticationController(
             IEmailSender emailSender,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
+            RoleManager<UserRole> roleManager,
             ILogger<AuthenticationController> logger)
         {
             _emailSender = emailSender;
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _logger = logger;
         }
 
@@ -55,7 +58,7 @@ namespace DotNetCore2018.WebApi.Controllers
                 {
                     user = new User()
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = Guid.NewGuid(),
                         UserName = model.UserName,
                         Email = model.Email
                     };
@@ -98,6 +101,11 @@ namespace DotNetCore2018.WebApi.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
             {
+                if (!await _roleManager.RoleExistsAsync(Constants.Roles.Administrator))
+                {
+                    await _roleManager.CreateAsync(new UserRole(Constants.Roles.Administrator));
+                }
+                await _userManager.AddToRoleAsync(user, Constants.Roles.User);
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction("Index", "Home");
             }

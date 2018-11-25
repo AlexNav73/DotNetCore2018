@@ -48,8 +48,8 @@ namespace DotNetCore2018.WebApi
             services.AddScoped<IAppContext, Data.AppContext>();
             services.AddScoped<IDataService, DataService>();
             services.AddScoped<IFileService, FileService>();
-            services.AddScoped<IUserStore<User>, UserStore>();
             services.AddScoped<SignInManager<User>>();
+            services.AddScoped<RoleManager<UserRole>>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(_configuration);
             services.AddSingleton(f => new MemoryCache(new MemoryCacheOptions()
@@ -65,7 +65,7 @@ namespace DotNetCore2018.WebApi
                 services.Configure<MvcOptions>(o => o.Filters.Add(new RequireHttpsAttribute()));
             }
 
-            services.AddIdentityCore<User>(o => 
+            services.AddIdentityCore<User>(o =>
             {
                 o.SignIn.RequireConfirmedEmail = false;
                 if (_env.IsDevelopment())
@@ -80,6 +80,8 @@ namespace DotNetCore2018.WebApi
                     o.User.RequireUniqueEmail = false;
                 }
             })
+            .AddRoles<UserRole>()
+            .AddEntityFrameworkStores<Data.AppContext>()
             .AddDefaultTokenProviders()
                 .AddTokenProvider<EmailTokenProvider<User>>(TokenOptions.DefaultEmailProvider);
 
