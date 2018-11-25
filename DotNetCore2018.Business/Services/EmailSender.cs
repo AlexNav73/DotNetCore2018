@@ -1,4 +1,3 @@
-
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Business.Services.Models;
 using Microsoft.Extensions.Options;
@@ -11,6 +10,9 @@ namespace DotNetCore2018.Business.Services
 {
     public class EmailSender : IEmailSender
     {
+        private const string ConfirmEmailSubject = "Confirm your email";
+        private const string PasswordResetSubject = "Reset password";
+
         public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
         {
             Options = optionsAccessor.Value;
@@ -18,8 +20,11 @@ namespace DotNetCore2018.Business.Services
 
         public AuthMessageSenderOptions Options { get; } //set only via Secret Manager
 
-        public async Task SendEmailAsync(string email, string loginUrl)
-            => await SendEmailAsync(email, Subject(), Body(loginUrl));
+        public async Task SendConfirmEmailAsync(string email, string loginUrl)
+            => await SendEmailAsync(email, ConfirmEmailSubject, ConfirmEmailBody(loginUrl));
+
+        public async Task SendPasswordResetAsync(string email, string passwordResetUrl)
+            => await SendEmailAsync(email, PasswordResetSubject, PasswordResetBody(passwordResetUrl));
 
         private Task SendEmailAsync(string email, string subject, string message)
             => Execute(Options.SendGridKey, subject, message, email);
@@ -43,10 +48,10 @@ namespace DotNetCore2018.Business.Services
             return client.SendEmailAsync(msg);
         }
 
-        private string Body(string loginUrl)
+        private string ConfirmEmailBody(string loginUrl)
             => $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(loginUrl)}'>clicking here</a>.";
 
-        private string Subject()
-            => "Confirm your email";
+        private string PasswordResetBody(string loginUrl)
+            => $"Please follow the <a href='{HtmlEncoder.Default.Encode(loginUrl)}'>link</a> to reset your password.";
     }
 }

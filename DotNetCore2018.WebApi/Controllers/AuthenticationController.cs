@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Data.Entities;
@@ -17,6 +16,9 @@ namespace DotNetCore2018.WebApi.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class AuthenticationController : Controller
     {
+        private string UserId = "userId";
+        private string PasswordResetToken = "passwordResetToken";
+
         private readonly IEmailSender _emailSender;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
@@ -78,7 +80,7 @@ namespace DotNetCore2018.WebApi.Controllers
                         values: new { userId = user.Id, code },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(model.Email, callbackUrl);
+                    await _emailSender.SendConfirmEmailAsync(model.Email, callbackUrl);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -100,6 +102,75 @@ namespace DotNetCore2018.WebApi.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return Forbid();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult PasswordReset()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> PasswordReset(PasswordResetViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var callbackUrl = Url.Action(
+                        nameof(PasswordResetSubmit),
+                        "Authentication",
+                        values: new { userId = user.Id, code },
+                        protocol: Request.Scheme);
+
+                    await _emailSender.SendPasswordResetAsync(model.Email, callbackUrl);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "User with that Email does not exists");
+                }
+            }
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult PasswordResetSubmit(string userId, string code)
+        {
+            TempData[UserId] = userId;
+            TempData[PasswordResetToken] = code;
+
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> PasswordResetSubmit(PasswordResetConfirmedViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = (string)TempData[UserId];
+                var code = (string)TempData[PasswordResetToken];
+
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user != null)
+                {
+                    var result = await _userManager.ResetPasswordAsync(user, code, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Something went wrong. Try to resend Email");
+                }
+            }
+            return View();
         }
 
         [HttpGet]

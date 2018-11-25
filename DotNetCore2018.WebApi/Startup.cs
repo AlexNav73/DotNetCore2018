@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
@@ -57,7 +57,9 @@ namespace DotNetCore2018.WebApi
                 SizeLimit = 30
             }));
             services.AddSwagger();
-            services.AddMvc();
+            services.AddMvc()
+                .AddSessionStateTempDataProvider();
+            services.AddSession();
             if (!_env.IsDevelopment())
             {
                 services.Configure<MvcOptions>(o => o.Filters.Add(new RequireHttpsAttribute()));
@@ -96,6 +98,7 @@ namespace DotNetCore2018.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -113,6 +116,7 @@ namespace DotNetCore2018.WebApi
             app.UseStaticFiles();
 
             app.UseAuthentication();
+            app.UseSession();
             app.UseMvc(ConfigureRoutes);
         }
 

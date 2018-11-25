@@ -4,6 +4,7 @@ namespace DotNetCore2018.Business.Services.Interfaces
 {
     public interface IEmailSender
     {
-        Task SendEmailAsync(string email, string loginUrl);
+        Task SendConfirmEmailAsync(string email, string loginUrl);
+        Task SendPasswordResetAsync(string email, string passwordResetUrl);
     }
 }
