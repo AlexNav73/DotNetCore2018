@@ -2,6 +2,7 @@
 using System.IO;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
+using DotNetCore2018.Business.Services.Models;
 using DotNetCore2018.Data;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.Middleware;
@@ -49,8 +50,8 @@ namespace DotNetCore2018.WebApi
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IUserStore<User>, UserStore>();
             services.AddScoped<SignInManager<User>>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddSingleton<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(_configuration);
             services.AddSingleton(f => new MemoryCache(new MemoryCacheOptions()
             {
                 SizeLimit = 30
@@ -61,6 +62,7 @@ namespace DotNetCore2018.WebApi
             {
                 services.Configure<MvcOptions>(o => o.Filters.Add(new RequireHttpsAttribute()));
             }
+
             services.AddIdentityCore<User>(o => 
             {
                 o.SignIn.RequireConfirmedEmail = false;
@@ -75,7 +77,10 @@ namespace DotNetCore2018.WebApi
 
                     o.User.RequireUniqueEmail = false;
                 }
-            });
+            })
+            .AddDefaultTokenProviders()
+                .AddTokenProvider<EmailTokenProvider<User>>(TokenOptions.DefaultEmailProvider);
+
             services.AddAuthentication(IdentityConstants.ApplicationScheme)
                 .AddCookie(IdentityConstants.ApplicationScheme, o => o.LoginPath = "/Authentication/Login");
         }
