@@ -105,7 +105,7 @@ namespace DotNetCore2018.WebApi.Controllers
                 {
                     await _roleManager.CreateAsync(new UserRole(Constants.Roles.Administrator));
                 }
-                await _userManager.AddToRoleAsync(user, Constants.Roles.User);
+                await _userManager.AddToRoleAsync(user, Constants.Roles.Administrator);
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction("Index", "Home");
             }
