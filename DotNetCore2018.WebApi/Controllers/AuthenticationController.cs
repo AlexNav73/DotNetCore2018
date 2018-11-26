@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.ViewModels;
@@ -9,6 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
@@ -16,8 +16,8 @@ namespace DotNetCore2018.WebApi.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class AuthenticationController : Controller
     {
-        private string UserId = "userId";
-        private string PasswordResetToken = "passwordResetToken";
+        private const string UserId = "userId";
+        private const string PasswordResetToken = "passwordResetToken";
 
         private readonly IEmailSender _emailSender;
         private readonly UserManager<User> _userManager;
@@ -83,6 +83,7 @@ namespace DotNetCore2018.WebApi.Controllers
                         values: new { userId = user.Id, code },
                         protocol: Request.Scheme);
 
+                    await AddUserToRole(user);
                     await _emailSender.SendConfirmEmailAsync(model.Email, callbackUrl);
 
                     return RedirectToAction("Index", "Home");
@@ -101,11 +102,6 @@ namespace DotNetCore2018.WebApi.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
             {
-                if (!await _roleManager.RoleExistsAsync(Constants.Roles.Administrator))
-                {
-                    await _roleManager.CreateAsync(new UserRole(Constants.Roles.Administrator));
-                }
-                await _userManager.AddToRoleAsync(user, Constants.Roles.Administrator);
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction("Index", "Home");
             }
@@ -210,6 +206,23 @@ namespace DotNetCore2018.WebApi.Controllers
         {
             await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
             return RedirectToAction("Index", "Home");
+        }
+
+        private async Task AddUserToRole(User user)
+        {
+            if (!await _roleManager.RoleExistsAsync(Constants.Roles.Administrator))
+            {
+                await _roleManager.CreateAsync(new UserRole(Constants.Roles.Administrator));
+            }
+            var admins = await _userManager.GetUsersInRoleAsync(Constants.Roles.Administrator);
+            if (admins.Count == 0)
+            {
+                await _userManager.AddToRoleAsync(user, Constants.Roles.Administrator);
+            }
+            else
+            {
+                await _userManager.AddToRoleAsync(user, Constants.Roles.User);
+            }
         }
     }
 }

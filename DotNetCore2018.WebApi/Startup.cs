@@ -87,6 +87,10 @@ namespace DotNetCore2018.WebApi
 
             services.AddAuthentication(IdentityConstants.ApplicationScheme)
                 .AddCookie(IdentityConstants.ApplicationScheme, o => o.LoginPath = "/Authentication/Login");
+            services.AddAuthorization(o =>
+            {
+                o.AddPolicy(Constants.Policy.Admin, policy => policy.RequireRole(Constants.Roles.Administrator));
+            });
         }
 
         public void Configure(

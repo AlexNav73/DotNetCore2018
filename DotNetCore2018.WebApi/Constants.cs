@@ -7,5 +7,10 @@ namespace DotNetCore2018.WebApi
             public const string Administrator = "Administrator";
             public const string User = "User";
         }
+
+        public static class Policy
+        {
+            public const string Admin = "Admin";
+        }
     }
 }
