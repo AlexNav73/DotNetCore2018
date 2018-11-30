@@ -65,9 +65,10 @@ namespace DotNetCore2018.WebApi
                 services.Configure<MvcOptions>(o => o.Filters.Add(new RequireHttpsAttribute()));
             }
 
-            services.AddIdentityCore<User>(o =>
+            services.AddIdentity<User, UserRole>(o =>
             {
                 o.SignIn.RequireConfirmedEmail = false;
+                o.SignIn.RequireConfirmedPhoneNumber = false;
                 if (_env.IsDevelopment())
                 {
                     o.Password.RequireDigit = false;
@@ -84,13 +85,6 @@ namespace DotNetCore2018.WebApi
             .AddEntityFrameworkStores<Data.AppContext>()
             .AddDefaultTokenProviders()
                 .AddTokenProvider<EmailTokenProvider<User>>(TokenOptions.DefaultEmailProvider);
-
-            services.AddAuthentication(IdentityConstants.ApplicationScheme)
-                .AddCookie(IdentityConstants.ApplicationScheme, o => o.LoginPath = "/Authentication/Login");
-            services.AddAuthorization(o =>
-            {
-                o.AddPolicy(Constants.Policy.Admin, policy => policy.RequireRole(Constants.Roles.Administrator));
-            });
         }
 
         public void Configure(

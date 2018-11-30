@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
-    [Authorize(Policy = Constants.Policy.Admin)]
+    [Authorize(Roles = Constants.Roles.Administrator)]
     [ApiExplorerSettings(IgnoreApi = true)]
     public class UserManagementController : Controller
     {

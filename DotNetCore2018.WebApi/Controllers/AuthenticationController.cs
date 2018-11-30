@@ -1,7 +1,6 @@
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.ViewModels;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -204,7 +203,7 @@ namespace DotNetCore2018.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
@@ -213,6 +212,10 @@ namespace DotNetCore2018.WebApi.Controllers
             if (!await _roleManager.RoleExistsAsync(Constants.Roles.Administrator))
             {
                 await _roleManager.CreateAsync(new UserRole(Constants.Roles.Administrator));
+            }
+            if (!await _roleManager.RoleExistsAsync(Constants.Roles.User))
+            {
+                await _roleManager.CreateAsync(new UserRole(Constants.Roles.User));
             }
             var admins = await _userManager.GetUsersInRoleAsync(Constants.Roles.Administrator);
             if (admins.Count == 0)
