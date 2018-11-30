@@ -6,11 +6,16 @@ using DotNetCore2018.Business.Services.Models;
 using DotNetCore2018.Data;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.Middleware;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -57,7 +62,13 @@ namespace DotNetCore2018.WebApi
                 SizeLimit = 30
             }));
             services.AddSwagger();
-            services.AddMvc()
+            services.AddMvc(o =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                    .RequireAuthenticatedUser()
+                                    .Build();
+                o.Filters.Add(new AuthorizeFilter(policy));
+            })
                 .AddSessionStateTempDataProvider();
             services.AddSession();
             if (!_env.IsDevelopment())
@@ -85,6 +96,39 @@ namespace DotNetCore2018.WebApi
             .AddEntityFrameworkStores<Data.AppContext>()
             .AddDefaultTokenProviders()
                 .AddTokenProvider<EmailTokenProvider<User>>(TokenOptions.DefaultEmailProvider);
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
+                .AddAzureAD(options => _configuration.Bind("AzureAd", options));
+
+            services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
+            {
+                options.Authority = options.Authority + "/v2.0/";
+
+                // Per the code below, this application signs in users in any Work and School
+                // accounts and any Microsoft Personal Accounts.
+                // If you want to direct Azure AD to restrict the users that can sign-in, change 
+                // the tenant value of the appsettings.json file in the following way:
+                // - only Work and School accounts => 'organizations'
+                // - only Microsoft Personal accounts => 'consumers'
+                // - Work and School and Personal accounts => 'common'
+
+                // If you want to restrict the users that can sign-in to only one tenant
+                // set the tenant value in the appsettings.json file to the tenant ID of this
+                // organization, and set ValidateIssuer below to true.
+
+                // If you want to restrict the users that can sign-in to several organizations
+                // Set the tenant value in the appsettings.json file to 'organizations', set
+                // ValidateIssuer, above to 'true', and add the issuers you want to accept to the
+                // options.TokenValidationParameters.ValidIssuers collection
+                options.TokenValidationParameters.ValidateIssuer = true;
+            });
         }
 
         public void Configure(

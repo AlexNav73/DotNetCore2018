@@ -1,4 +1,6 @@
 using DotNetCore2018.Core.Breadcrumbs;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -6,8 +8,9 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetCore2018.WebApi.Controllers
 {
-    [ApiExplorerSettings(IgnoreApi = true)]
     [Breadcrumb]
+    [AllowAnonymous]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -23,7 +26,15 @@ namespace DotNetCore2018.WebApi.Controllers
             return View();
         }
 
-        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Do()
+        {
+            var redirectUrl = Url.Action("Product", "Index");
+            return Challenge(
+                new AuthenticationProperties { RedirectUri = redirectUrl },
+                OpenIdConnectDefaults.AuthenticationScheme);
+        }
+
         public IActionResult Error()
         {
             var error = HttpContext.Features.Get<IExceptionHandlerFeature>().Error;
