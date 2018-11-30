@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Tests.Mocks;

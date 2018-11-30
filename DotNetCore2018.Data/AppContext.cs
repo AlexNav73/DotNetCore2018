@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore;
 using DotNetCore2018.Data.Entities;
 using System.Threading.Tasks;
 using System.Threading;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DotNetCore2018.Data
 {
@@ -12,11 +13,12 @@ namespace DotNetCore2018.Data
         DbSet<Supplier> Suppliers { get; }
         DbSet<Product> Products { get; }
         DbSet<User> Users { get; }
+        DbSet<UserRole> Roles { get; }
         int SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 
-    public sealed class AppContext : DbContext, IAppContext
+    public sealed class AppContext : IdentityDbContext<User, UserRole, Guid>, IAppContext
     {
         public AppContext(DbContextOptions<AppContext> options)
          : base(options)
@@ -26,10 +28,10 @@ namespace DotNetCore2018.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

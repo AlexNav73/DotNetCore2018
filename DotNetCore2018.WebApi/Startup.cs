@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.IO;
-using System.Reflection;
 using DotNetCore2018.Business.Services;
 using DotNetCore2018.Business.Services.Interfaces;
+using DotNetCore2018.Business.Services.Models;
 using DotNetCore2018.Data;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.Middleware;
@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -50,23 +49,27 @@ namespace DotNetCore2018.WebApi
             services.AddScoped<IAppContext, Data.AppContext>();
             services.AddScoped<IDataService, DataService>();
             services.AddScoped<IFileService, FileService>();
-            services.AddScoped<IUserStore<User>, UserStore>();
             services.AddScoped<SignInManager<User>>();
-            services.AddScoped<IAuthenticationService, AuthentincationService>();
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.AddSingleton<MemoryCache>(f => new MemoryCache(new MemoryCacheOptions()
+            services.AddScoped<RoleManager<UserRole>>();
+            services.AddSingleton<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(_configuration);
+            services.AddSingleton(f => new MemoryCache(new MemoryCacheOptions()
             {
                 SizeLimit = 30
             }));
             services.AddSwagger();
-            services.AddMvc();
+            services.AddMvc()
+                .AddSessionStateTempDataProvider();
+            services.AddSession();
             if (!_env.IsDevelopment())
             {
                 services.Configure<MvcOptions>(o => o.Filters.Add(new RequireHttpsAttribute()));
             }
-            services.AddIdentityCore<User>(o => 
+
+            services.AddIdentity<User, UserRole>(o =>
             {
                 o.SignIn.RequireConfirmedEmail = false;
+                o.SignIn.RequireConfirmedPhoneNumber = false;
                 if (_env.IsDevelopment())
                 {
                     o.Password.RequireDigit = false;
@@ -78,14 +81,19 @@ namespace DotNetCore2018.WebApi
 
                     o.User.RequireUniqueEmail = false;
                 }
-            });
-            services.AddAuthentication(o => {
+            })
+            .AddRoles<UserRole>()
+            .AddEntityFrameworkStores<Data.AppContext>()
+            .AddDefaultTokenProviders()
+                .AddTokenProvider<EmailTokenProvider<User>>(TokenOptions.DefaultEmailProvider);
+
+            services.AddAuthentication(o =>
+            {
                 o.DefaultScheme = IdentityConstants.ApplicationScheme;
                 o.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
-                .AddAzureAd(options => _configuration.Bind("AzureAd", options))
-                .AddCookie();
-                //.AddCookie(IdentityConstants.ApplicationScheme, o => o.LoginPath = "/Authentication/Login");
+            .AddAzureAd(options => _configuration.Bind("AzureAd", options))
+            .AddCookie();
         }
 
         public void Configure(
@@ -99,13 +107,15 @@ namespace DotNetCore2018.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
                 app.UseExceptionHandler("/home/error");
+                app.UseHsts();
             }
 
-            app.UseAuthentication();
+            app.UseHttpsRedirection();
             app.UseSwaggerUi3WithApiExplorer();
             app.CacheImageFiles(new ImageCacheOptions()
             {
@@ -113,6 +123,9 @@ namespace DotNetCore2018.WebApi
                 ExpireAfter = TimeSpan.FromMinutes(30)
             });
             app.UseStaticFiles();
+
+            app.UseAuthentication();
+            app.UseSession();
             app.UseMvc(ConfigureRoutes);
         }
 

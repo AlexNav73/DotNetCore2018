@@ -1,33 +1,57 @@
-using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Business.Services.Models;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace DotNetCore2018.Business.Services
 {
     public class EmailSender : IEmailSender
     {
-        private readonly EmailSenderConfiguration _config;
+        private const string ConfirmEmailSubject = "Confirm your email";
+        private const string PasswordResetSubject = "Reset password";
 
-        public EmailSender(IConfiguration configuration)
+        public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
         {
-            _config = configuration.GetSection("Mail").Get<EmailSenderConfiguration>();
+            Options = optionsAccessor.Value;
         }
 
-        public Task SendEmailAsync(string email, string subject, string body)
+        public AuthMessageSenderOptions Options { get; } //set only via Secret Manager
+
+        public async Task SendConfirmEmailAsync(string email, string loginUrl)
+            => await SendEmailAsync(email, ConfirmEmailSubject, ConfirmEmailBody(loginUrl));
+
+        public async Task SendPasswordResetAsync(string email, string passwordResetUrl)
+            => await SendEmailAsync(email, PasswordResetSubject, PasswordResetBody(passwordResetUrl));
+
+        private Task SendEmailAsync(string email, string subject, string message)
+            => Execute(Options.SendGridKey, subject, message, email);
+
+        private Task Execute(string apiKey, string subject, string message, string email)
         {
-            var credentials = new NetworkCredential(_config.UserName, _config.Password);
-            using (var client = new SmtpClient(_config.Host, _config.Port) { Credentials = credentials, EnableSsl = _config.EnableSSL })
+            var client = new SendGridClient(apiKey);
+            var msg = new SendGridMessage()
             {
-                var message = new MailMessage(_config.UserName, email, subject, body)
-                {
-                    IsBodyHtml = true
-                };
+                From = new EmailAddress("alexandr.navitskiy@gmail.com"),
+                Subject = subject,
+                PlainTextContent = message,
+                HtmlContent = message
+            };
+            msg.AddTo(new EmailAddress(email));
 
-                return client.SendMailAsync(message);
-            }
+            // Disable click tracking.
+            // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
+            msg.SetClickTracking(false, false);
+
+            return client.SendEmailAsync(msg);
         }
+
+        private string ConfirmEmailBody(string loginUrl)
+            => $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(loginUrl)}'>clicking here</a>.";
+
+        private string PasswordResetBody(string loginUrl)
+            => $"Please follow the <a href='{HtmlEncoder.Default.Encode(loginUrl)}'>link</a> to reset your password.";
     }
 }

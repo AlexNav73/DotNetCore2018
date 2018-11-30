@@ -1,0 +1,29 @@
+@model IEnumerable<UserViewModel>
+
+@{
+    ViewBag.Title = "View all users";
+}
+
+<div>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" hidden></th>
+                <th scope="col">User name</th>
+                <th scope="col">Roles</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <th scope="row">1</th>
+                    <td hidden>@user.UserId</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Roles</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

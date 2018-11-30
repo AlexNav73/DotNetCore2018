@@ -8,7 +8,7 @@
     <div class="card-deck mb-5">
         @foreach (var category in Model)
         {
-            @Html.Partial("_CategoryCard", category)
+            @await Html.PartialAsync("_CategoryCard", category)
         }
     </div>
     <a asp-action="Create" class="btn btn-primary">Create new</a>
