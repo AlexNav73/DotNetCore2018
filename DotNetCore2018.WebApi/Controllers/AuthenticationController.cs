@@ -98,11 +98,14 @@ namespace DotNetCore2018.WebApi.Controllers
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            if (result.Succeeded)
+            if (user != null)
             {
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Home");
+                var result = await _userManager.ConfirmEmailAsync(user, code);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("Index", "Home");
+                }
             }
             return Forbid();
         }
