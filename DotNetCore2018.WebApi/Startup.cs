@@ -37,9 +37,7 @@ namespace DotNetCore2018.WebApi
             _configuration = configuration;
             _env = env;
 
-            var logConfig = configuration.GetSection("Logging");
-            var logLevelConfig = logConfig.GetSection("LogLevel");
-            var defaultLogLevel = logLevelConfig.GetValue<string>("Default");
+            var defaultLogLevel = _configuration.GetValue<string>("Logging:LogLevel:Default");
 
             logger.LogTrace("Logging configuration: {0}", defaultLogLevel);
         }
@@ -62,14 +60,6 @@ namespace DotNetCore2018.WebApi
                 SizeLimit = 30
             }));
             services.AddSwagger();
-            services.AddMvc(o =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                                    .RequireAuthenticatedUser()
-                                    .Build();
-                o.Filters.Add(new AuthorizeFilter(policy));
-            })
-                .AddSessionStateTempDataProvider();
             services.AddSession();
             if (!_env.IsDevelopment())
             {
@@ -78,10 +68,11 @@ namespace DotNetCore2018.WebApi
 
             services.AddIdentity<User, UserRole>(o =>
             {
-                o.SignIn.RequireConfirmedEmail = false;
-                o.SignIn.RequireConfirmedPhoneNumber = false;
                 if (_env.IsDevelopment())
                 {
+                    o.SignIn.RequireConfirmedEmail = false;
+                    o.SignIn.RequireConfirmedPhoneNumber = false;
+
                     o.Password.RequireDigit = false;
                     o.Password.RequiredLength = 5;
                     o.Password.RequiredUniqueChars = 0;
@@ -129,6 +120,15 @@ namespace DotNetCore2018.WebApi
                 // options.TokenValidationParameters.ValidIssuers collection
                 options.TokenValidationParameters.ValidateIssuer = true;
             });
+
+            services.AddMvc(o =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                o.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .AddSessionStateTempDataProvider();
         }
 
         public void Configure(
