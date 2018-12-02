@@ -29,7 +29,7 @@ namespace DotNetCore2018.WebApi.Controllers
         [HttpGet]
         public IActionResult Do()
         {
-            var redirectUrl = Url.Action("Product", "Index");
+            var redirectUrl = Url.Action("Index", "Product");
             return Challenge(
                 new AuthenticationProperties { RedirectUri = redirectUrl },
                 OpenIdConnectDefaults.AuthenticationScheme);
