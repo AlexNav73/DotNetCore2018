@@ -1,6 +1,8 @@
 using DotNetCore2018.Business.Services.Interfaces;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -207,6 +209,7 @@ namespace DotNetCore2018.WebApi.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
+            await HttpContext.SignOutAsync(AzureADDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
 

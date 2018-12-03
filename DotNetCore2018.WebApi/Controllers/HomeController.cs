@@ -1,6 +1,4 @@
 using DotNetCore2018.Core.Breadcrumbs;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace DotNetCore2018.WebApi.Controllers
 {
     [Breadcrumb]
-    [AllowAnonymous]
+    [Authorize]
     [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
@@ -21,6 +19,7 @@ namespace DotNetCore2018.WebApi.Controllers
         }
 
         [Breadcrumb]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
@@ -29,10 +28,7 @@ namespace DotNetCore2018.WebApi.Controllers
         [HttpGet]
         public IActionResult Do()
         {
-            var redirectUrl = Url.Action("Index", "Product");
-            return Challenge(
-                new AuthenticationProperties { RedirectUri = redirectUrl },
-                OpenIdConnectDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Product");
         }
 
         public IActionResult Error()

@@ -8,6 +8,7 @@ using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.Middleware;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -94,8 +95,40 @@ namespace DotNetCore2018.WebApi
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                .AddAzureAD(options => _configuration.Bind("AzureAd", options));
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultScheme = AzureADDefaults.AuthenticationScheme;
+
+                //options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultAuthenticateScheme = AzureADDefaults.AuthenticationScheme;
+
+                //options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultChallengeScheme = AzureADDefaults.AuthenticationScheme;
+
+                //options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultSignInScheme = AzureADDefaults.AuthenticationScheme;
+
+                //options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultSignOutScheme = AzureADDefaults.AuthenticationScheme;
+
+                /* Local login
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                */
+
+                /* Azure AD Authentication
+                options.DefaultChallengeScheme = AzureADDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = AzureADDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = AzureADDefaults.AuthenticationScheme;
+                options.DefaultSignOutScheme = AzureADDefaults.AuthenticationScheme;
+                */
+            })
+            .AddAzureAD(options => _configuration.Bind("AzureAd", options))
+            .AddCookie(o => 
+            {
+                o.LoginPath = "/Authentication/Login";
+                o.LogoutPath = "/Authentication/Logout";
+            });
 
             services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
             {
@@ -105,10 +138,10 @@ namespace DotNetCore2018.WebApi
 
             services.AddMvc(o =>
             {
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                o.Filters.Add(new AuthorizeFilter(policy));
+                //var policy = new AuthorizationPolicyBuilder()
+                //    .RequireAuthenticatedUser()
+                //    .Build();
+                //o.Filters.Add(new AuthorizeFilter(policy));
             })
             .AddSessionStateTempDataProvider();
         }
