@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace DotNetCore2018.WebApi.Controllers
 {
     [Breadcrumb]
-    [Authorize]
+    [AllowAnonymous]
     [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
@@ -19,13 +19,13 @@ namespace DotNetCore2018.WebApi.Controllers
         }
 
         [Breadcrumb]
-        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Do()
         {
             return RedirectToAction("Index", "Product");

@@ -10,13 +10,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -97,7 +95,7 @@ namespace DotNetCore2018.WebApi
 
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 //options.DefaultScheme = AzureADDefaults.AuthenticationScheme;
 
                 //options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -128,6 +126,7 @@ namespace DotNetCore2018.WebApi
             {
                 o.LoginPath = "/Authentication/Login";
                 o.LogoutPath = "/Authentication/Logout";
+                o.AccessDeniedPath = "/Authenticated/AccessDenied";
             });
 
             services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
@@ -136,14 +135,8 @@ namespace DotNetCore2018.WebApi
                 options.TokenValidationParameters.ValidateIssuer = false;
             });
 
-            services.AddMvc(o =>
-            {
-                //var policy = new AuthorizationPolicyBuilder()
-                //    .RequireAuthenticatedUser()
-                //    .Build();
-                //o.Filters.Add(new AuthorizeFilter(policy));
-            })
-            .AddSessionStateTempDataProvider();
+            services.AddMvc()
+                .AddSessionStateTempDataProvider();
         }
 
         public void Configure(
