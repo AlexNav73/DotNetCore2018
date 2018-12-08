@@ -10,5 +10,10 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: DotNetCoreInstaller@0
+  inputs:
+    version: '2.2.100'
+- script: dotnet restore ./DotNetCore2018.WebApi/
+  displayName: 'dotnet restore ./DotNetCore2018.WebApi/'
 - script: dotnet build --configuration $(buildConfiguration) ./DotNetCore2018.WebApi/
   displayName: 'dotnet build $(buildConfiguration) ./DotNetCore2018.WebApi/'
