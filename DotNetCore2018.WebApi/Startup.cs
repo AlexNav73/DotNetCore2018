@@ -47,7 +47,6 @@ namespace DotNetCore2018.WebApi
             {
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
             });
-            services.AddScoped<IAppContext, Data.AppContext>();
             services.AddScoped<IDataService, DataService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<SignInManager<User>>();
@@ -58,7 +57,7 @@ namespace DotNetCore2018.WebApi
             {
                 SizeLimit = 30
             }));
-            services.AddSwagger();
+            services.AddSwaggerDocument();
             services.AddSession();
             if (!_env.IsDevelopment())
             {

@@ -13,27 +13,24 @@ namespace DotNetCore2018.WebApi.Controllers
     public class UserManagementController : Controller
     {
         private readonly UserManager<User> _userManager;
-        private readonly IAppContext _context;
 
-        public UserManagementController(
-            IAppContext context,
-            UserManager<User> userManager)
+        public UserManagementController(UserManager<User> userManager)
         {
-            _context = context;
             _userManager = userManager;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var users = _context.Users
+            var users = _userManager.Users.ToArray();
+            var models = users
                 .Select(x => new UserViewModel()
                 {
                     UserId = x.Id,
                     UserName = x.UserName,
                     Roles = string.Join(", ", _userManager.GetRolesAsync(x).GetAwaiter().GetResult())
                 });
-            return View(users);
+            return View(models);
         }
     }
 }
