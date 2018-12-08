@@ -126,7 +126,7 @@
             "endIpAddress": "0.0.0.0",
             "startIpAddress": "0.0.0.0"
           }
-        }
+        },
       ]
     },
     {
@@ -146,37 +146,50 @@
       }
     },
     {
-      "apiVersion": "2015-08-01",
-      "name": "[variables('webSiteName')]",
-      "type": "Microsoft.Web/sites",
-      "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverFarms/', parameters('hostingPlanName'))]"
-      ],
-      "tags": {
-        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "empty",
-        "displayName": "Website"
-      },
-      "properties": {
+        "apiVersion": "2015-08-01",
         "name": "[variables('webSiteName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
-      },
-      "resources": [
-        {
-          "apiVersion": "2015-08-01",
-          "type": "config",
-          "name": "connectionstrings",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites/', variables('webSiteName'))]"
-          ],
-          "properties": {
-            "DefaultConnection": {
-              "value": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('databaseName'), ';User Id=', parameters('administratorLogin'), '@', variables('sqlserverName'), ';Password=', parameters('administratorLoginPassword'), ';')]",
-              "type": "SQLServer"
+        "type": "Microsoft.Web/sites",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+            "[resourceId('Microsoft.Web/serverFarms/', parameters('hostingPlanName'))]"
+        ],
+        "tags": {
+            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "empty",
+            "displayName": "Website"
+        },
+        "properties": {
+            "name": "[variables('webSiteName')]",
+            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+        },
+        "resources": [
+            {
+                "apiVersion": "2015-08-01",
+                "type": "config",
+                "name": "connectionstrings",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Web/Sites/', variables('webSiteName'))]"
+                ],
+                "properties": {
+                    "DefaultConnection": {
+                        "value": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('databaseName'), ';User Id=', parameters('administratorLogin'), '@', variables('sqlserverName'), ';Password=', parameters('administratorLoginPassword'), ';')]",
+                        "type": "SQLServer"
+                    }
+                }
+            },
+            {
+                "apiVersion": "2015-08-01",
+                "type": "config",
+                "name": "appsettings",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Web/Sites/', variables('webSiteName'))]"
+                ],
+                "tags": {
+                    "displayName": "config"
+                },
+                "properties": {
+                }
             }
-          }
-        }
-      ]
+        ]
     }
   ]
 }
