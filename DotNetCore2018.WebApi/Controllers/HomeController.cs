@@ -31,6 +31,11 @@ namespace DotNetCore2018.WebApi.Controllers
             return RedirectToAction("Index", "Product");
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
         public IActionResult Error()
         {
             var error = HttpContext.Features.Get<IExceptionHandlerFeature>().Error;

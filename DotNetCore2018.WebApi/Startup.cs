@@ -87,6 +87,13 @@ namespace DotNetCore2018.WebApi
             .AddDefaultTokenProviders()
                 .AddTokenProvider<EmailTokenProvider<User>>(TokenOptions.DefaultEmailProvider);
 
+            services.ConfigureApplicationCookie(o =>
+            {
+                o.LoginPath = "/Authentication/Login";
+                o.LogoutPath = "/Authentication/Logout";
+                o.AccessDeniedPath = "/Home/AccessDenied";
+            });
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -122,12 +129,7 @@ namespace DotNetCore2018.WebApi
                 */
             })
             .AddAzureAD(options => _configuration.Bind("AzureAd", options))
-            .AddCookie(o => 
-            {
-                o.LoginPath = "/Authentication/Login";
-                o.LogoutPath = "/Authentication/Logout";
-                o.AccessDeniedPath = "/Authenticated/AccessDenied";
-            });
+            .AddCookie();
 
             services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
             {
@@ -159,7 +161,7 @@ namespace DotNetCore2018.WebApi
             }
 
             app.UseHttpsRedirection();
-            app.UseSwaggerUi3WithApiExplorer();
+            app.UseSwaggerUi3();
             app.CacheImageFiles(new ImageCacheOptions()
             {
                 CacheTo = "cache",
