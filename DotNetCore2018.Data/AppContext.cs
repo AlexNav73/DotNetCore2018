@@ -1,24 +1,11 @@
 using System;
 using Microsoft.EntityFrameworkCore;
-using DotNetCore2018.Data.Entities;
-using System.Threading.Tasks;
-using System.Threading;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using DotNetCore2018.Data.Entities;
 
 namespace DotNetCore2018.Data
 {
-    public interface IAppContext
-    {
-        DbSet<Category> Categories { get; }
-        DbSet<Supplier> Suppliers { get; }
-        DbSet<Product> Products { get; }
-        DbSet<User> Users { get; }
-        DbSet<UserRole> Roles { get; }
-        int SaveChanges();
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
-    }
-
-    public sealed class AppContext : IdentityDbContext<User, UserRole, Guid>, IAppContext
+    public sealed class AppContext : IdentityDbContext<User, UserRole, Guid>
     {
         public AppContext(DbContextOptions<AppContext> options)
          : base(options)

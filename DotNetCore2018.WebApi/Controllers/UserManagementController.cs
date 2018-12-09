@@ -1,4 +1,3 @@
-using DotNetCore2018.Data;
 using DotNetCore2018.Data.Entities;
 using DotNetCore2018.WebApi.ViewModels;
 using Microsoft.AspNetCore.Authorization;

@@ -11,9 +11,10 @@ variables:
 
 steps:
 - task: DotNetCoreInstaller@0
+  displayName: "Install .NET Core SDK 2.2"
   inputs:
     version: '2.2.100'
 - script: dotnet restore ./DotNetCore2018.WebApi/
-  displayName: 'dotnet restore ./DotNetCore2018.WebApi/'
+  displayName: 'dotnet restore'
 - script: dotnet build --configuration $(buildConfiguration) ./DotNetCore2018.WebApi/
-  displayName: 'dotnet build $(buildConfiguration) ./DotNetCore2018.WebApi/'
+  displayName: 'dotnet build $(buildConfiguration)'
