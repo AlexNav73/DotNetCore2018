@@ -22,8 +22,8 @@ steps:
   displayName: 'dotnet publish $(buildConfiguration)'
   inputs:
     command: publish
-    publishWebProjects: False
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory) ./DotNetCore2018.WebApi/DotNetCore2018.WebApi.csproj'
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
 - task: AzureRmWebAppDeployment@3
   displayName: 'Publish to Azure App Services'
