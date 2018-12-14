@@ -37,7 +37,10 @@ namespace DotNetCore2018.WebApi
             _env = env;
 
             var defaultLogLevel = _configuration.GetValue<string>("Logging:LogLevel:Default");
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
+            logger.LogInformation($"Connection string: [{connectionString}]");
+            logger.LogInformation($"Environment: [{_env.EnvironmentName}]");
             logger.LogTrace("Logging configuration: {0}", defaultLogLevel);
         }
 
