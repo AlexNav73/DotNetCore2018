@@ -98,6 +98,10 @@ namespace DotNetCore2018.WebApi
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AutomaticAuthentication = false;
+            });
 
             services.AddAuthentication(options =>
             {
@@ -144,9 +148,12 @@ namespace DotNetCore2018.WebApi
             IApplicationBuilder app,
             IHostingEnvironment env,
             IApplicationLifetime appLifetime,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            Data.AppContext context)
         {
             appLifetime.ApplicationStarted.Register(OnApplicationStart, loggerFactory.CreateLogger<Startup>());
+
+            context.Database.Migrate();
 
             if (env.IsDevelopment())
             {

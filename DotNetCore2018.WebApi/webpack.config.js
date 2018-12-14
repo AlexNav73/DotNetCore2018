@@ -25,13 +25,13 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: '[name].css',
             chunkFilename: '[name].chunk.[hash].css'
-        }),
-        new CopyWebpackPlugin([
-            {
-                from: 'src/images/NoImage.jpg',
-                to: 'images/NoImage.jpg',
-                toType: 'file'
-            }
-        ])
+        }) //,
+        // new CopyWebpackPlugin([
+        //     {
+        //         from: 'src/images/NoImage.jpg',
+        //         to: 'images/NoImage.jpg',
+        //         toType: 'file'
+        //     }
+        // ])
     ]
 };

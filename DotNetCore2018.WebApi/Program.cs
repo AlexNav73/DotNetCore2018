@@ -20,6 +20,7 @@ namespace DotNetCore2018.WebApi
                     logging.ClearProviders();
                     logging.SetMinimumLevel(LogLevel.Trace);
                 })
+                .CaptureStartupErrors(true)
                 .UseNLog()
                 .Build();
     }

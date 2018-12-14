@@ -1,3 +1,7 @@
+@using Microsoft.Extensions.Configuration
+
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment env
+@inject Microsoft.Extensions.Configuration.IConfiguration config
 
 @{
     ViewBag.Title = "Home";
@@ -5,6 +9,9 @@
 
 @section breadcrumbs {
 }
+
+<h3>@env.EnvironmentName</h3>
+<h4>Connection string: @config.GetConnectionString("DefaultConnection")</h4>
 
 <div class="container-fluid mb-3">
     <p id="categoryList" class="text-md-left"></p>
