@@ -23,3 +23,15 @@ services:
             - mssql
         links:
             - mssql
+
+    proxy:
+        build:
+            context:  ./nginx
+            dockerfile: Dockerfile
+        container_name: proxy
+        ports:
+            - "5000:80"
+        depends_on:
+            - dotnetcore2018.webapi
+        links:
+            - dotnetcore2018.webapi
