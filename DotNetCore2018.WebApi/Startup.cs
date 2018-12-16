@@ -62,14 +62,14 @@ namespace DotNetCore2018.WebApi
             }));
             services.AddSwaggerDocument();
             services.AddSession();
-            if (!_env.IsDevelopment())
+            if (!_env.IsDevelopment() && !_env.IsEnvironment("Docker"))
             {
                 services.Configure<MvcOptions>(o => o.Filters.Add(new RequireHttpsAttribute()));
             }
 
             services.AddIdentity<User, UserRole>(o =>
             {
-                if (_env.IsDevelopment())
+                if (_env.IsDevelopment() || _env.IsEnvironment("Docker"))
                 {
                     o.SignIn.RequireConfirmedEmail = false;
                     o.SignIn.RequireConfirmedPhoneNumber = false;
@@ -158,7 +158,7 @@ namespace DotNetCore2018.WebApi
 
             context.Database.Migrate();
 
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() && env.IsEnvironment("Docker"))
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();

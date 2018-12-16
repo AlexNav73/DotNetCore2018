@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCore2018.WebApi", "Do
 EndProject
 Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "DotNetCore2018.ResourceGroup", "DotNetCore2018.ResourceGroup\DotNetCore2018.ResourceGroup.deployproj", "{116F9A52-0EB4-4F13-A6A1-CD5BDA1F9E87}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{DE172152-5E10-4B50-9F6C-D0607A8F7B81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{116F9A52-0EB4-4F13-A6A1-CD5BDA1F9E87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{116F9A52-0EB4-4F13-A6A1-CD5BDA1F9E87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{116F9A52-0EB4-4F13-A6A1-CD5BDA1F9E87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE172152-5E10-4B50-9F6C-D0607A8F7B81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE172152-5E10-4B50-9F6C-D0607A8F7B81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE172152-5E10-4B50-9F6C-D0607A8F7B81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE172152-5E10-4B50-9F6C-D0607A8F7B81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

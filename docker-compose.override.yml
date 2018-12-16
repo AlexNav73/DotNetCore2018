@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  dotnetcore2018.webapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80; #https://+:443
+      #- ASPNETCORE_HTTPS_PORT=44302
+    ports:
+      - "55349:80"
+      #- "44302:443"
+    volumes:
+      #- ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro

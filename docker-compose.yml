@@ -1,7 +1,25 @@
-version: 3
+version: '3.4'
 
 services:
-    aspnet:
-        build: ./DotNetCore2018.WebApi
-    ui:
-        build: ./DotNetCore2018.WebApi/src/ui
+    mssql:
+        image: mcr.microsoft.com/mssql/server
+        container_name: mssql
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=Admin1234567890
+        expose:
+            - "1433"
+        healthcheck:
+            test: ["CMD", "ping", "-c", "3", "http://localhost:1433"]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+
+    dotnetcore2018.webapi:
+        build:
+            context: .
+            dockerfile: DotNetCore2018.WebApi/Dockerfile
+        depends_on:
+            - mssql
+        links:
+            - mssql
