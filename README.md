@@ -28,4 +28,49 @@ UI written mainly in [Rust](https://www.rust-lang.org/en-US/) programming langua
 6. Install [Node.js](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com/en/)
 7. `cd DotNetCore2018.WebApi`
 8. Use `yarn install` to restore all dependencies
-9. Launch `build.bat` script to build UI
+9. Launch `build_web.bat` script to build UI
+
+# Deploy
+
+## Docker
+
+In order to deploy web app to container one should build all 3 containers (`mssql`, `dotnetcore2018.webapi` and `nginx`) using `docker-compose`.
+After `mssql` will be successfully built one sould make sure that database created and all migrations applied.
+Container exposes only http port to access (for now).
+
+Steps to deploy app into docker container:
+1. Create `appsettings.Docker.json` file with connection string that points to `mssql` server
+2. In repository root execute `docker-compose build` command to build all containers
+3. Execute `docker-compose up` command to start containers up (issue the command multiple times until database will be ready)
+4. Get machine ip (`docker-machine ip`) and use it to connect to the app
+
+UI *must* be build before deploying to a container.
+
+## IIS
+
+1. Create `appsettings.Production.json` file with appropriate connection string
+2. Publish `DotNetCore2018.WebApi` application to a folder
+3. Create web api in IIS and point path to publish directory
+4. For HTTPS connection one may use developer certificate
+
+# Conclusion
+
+## Pros
+
+1. New fully rewritten design
+2. Most of the components implemented as separate NuGet packages that can be easily integrated into application
+3. Well implemented default Identity Provider (can be applied on top of existing database)
+4. TagsHelpers really improve readability of the cshtml sources
+5. Middleware pipeline gives clear understanding of what happened with request
+6. Ability to write unit tests for controllers
+
+## Cons
+
+1. Routing. If route defined with `Route("[controller]/[action]")` attribute on controller it didn't recognized by Default route
+2. Required methods is not type-checked. (`ViewComponent` requires `InvokeAsync` method and so on)
+3. Some methods of the `Sturtup.cs` class can't be injected with services
+4. `SignInManager` can't be used with non-standard Authentication scheme (`SignOutAsync` throws exception if Cookie authentication scheme not exists)
+5. Not all HtmlHelpers covered by TagHalpers (`Html.Partial` must be written with old style)
+6. Not supported `wasm` content type (automatic content type detection)
+7. NuGet (may be bug?) link some packages to local folder causing Azure Pipeline to fail
+
